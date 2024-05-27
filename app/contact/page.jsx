@@ -24,7 +24,7 @@ const Page = () => {
 
     const nameRegex = /^[A-Za-z\s]+$/;
     const emailRegex = /^\S+@\S+\.\S+$/;
-    const messageRegex = /^.{20,500}$/;
+    const messageRegex = /^.{10,500}$/;
 
     if (!nameRegex.test(firstName.trim())) {
       formErrors.firstName = "First name is invalid";
@@ -47,7 +47,7 @@ const Page = () => {
     }
 
     if (!messageRegex.test(message.trim())) {
-      formErrors.message = "Message must be between 20 and 500 letters";
+      formErrors.message = "Message must be between 10 and 500 characters";
       valid = false;
     }
 

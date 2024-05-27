@@ -3,7 +3,7 @@ import { Skeleton } from "./ui/skeleton";
 
 const ExperienceCard = ({ experience }) => {
   return (
-    <div className="bg-background shadow h-fit w-full md:flex p-8">
+    <div className="bg-background shadow h-fit w-full md:flex max-sm:p-4 p-8">
       <div className="md:flex-1 space-y-1">
         <h1 className="text-lg font-bold text-blue-600">
           {!experience ? (
@@ -31,7 +31,7 @@ const ExperienceCard = ({ experience }) => {
           <p className="text-blue-600 font-semibold">{experience.site}</p>
         )}
       </div>
-      <div className="pl-4 py-2 md:flex-1">
+      <div className="py-2 md:flex-1">
         {!experience ? (
           <div className="flex flex-col gap-2">
             <Skeleton className="w-full h-[20px] rounded" />

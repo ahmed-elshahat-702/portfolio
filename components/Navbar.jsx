@@ -63,14 +63,14 @@ const Navbar = () => {
               href={"/"}
               className="flex items-center gap-1 max-sm:items-start max-sm:flex-col max-sm:gap-0"
             >
-              <span className="font-bold text-xl">
+              <span className="font-bold sm:text-xl max-sm:text-md">
                 {!user ? (
-                  <Skeleton className="w-[150px] h-[25px] rounded ml-1" />
+                  <Skeleton className="w-[150px] h-[25px] rounded ml-1 max-sm:mb-1" />
                 ) : (
                   user.name
                 )}
               </span>
-              <div className="text-gray-500 font-bold text-sm mb-0 flex items-center justify-center">
+              <div className="text-gray-500 font-bold sm:text-sm max-sm:text-xs mb-0 flex items-center justify-center">
                 /{" "}
                 {!user ? (
                   <Skeleton className="w-[100px] h-[20px] rounded ml-1" />

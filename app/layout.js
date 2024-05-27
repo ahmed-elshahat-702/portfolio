@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
       <body
         suppressHydrationWarning={true}
         className={cn(
-          "w-full h-dvh bg-background font-sans antialiased",
+          "w-full min-h-dvh bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
@@ -52,11 +52,11 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {/* <main className="w-full h-full"> */}
-          <Navbar />
-          {children}
-          <Footer />
-          {/* </main> */}
+          <main>
+            <Navbar />
+            {children}
+            <Footer />
+          </main>
         </ThemeProvider>
       </body>
     </html>
