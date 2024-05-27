@@ -18,7 +18,9 @@ const ProjectCard = ({ project }) => {
             {!project ? (
               <Skeleton className="w-[400px] h-[25px] rounded" />
             ) : (
-              <Link href={project.link}>{project.link}</Link>
+              <Link href={project.link} target="_blank">
+                {project.link}
+              </Link>
             )}
           </h3>
         </div>
