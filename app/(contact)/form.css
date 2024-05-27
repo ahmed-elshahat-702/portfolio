@@ -1,9 +1,0 @@
-input, textarea {
-    @apply text-blue-600 border-b-2 focus:border-blue-600 outline-none transition;
-}
-.input-div {
-    @apply flex flex-col gap-2;
-}
-.reqiured {
-    @apply text-red-600;
-}
