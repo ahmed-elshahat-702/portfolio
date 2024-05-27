@@ -19,10 +19,10 @@ const navLinks = [
     title: "Resume",
     link: "/resume",
   },
-  // {
-  //   title: "Contact",
-  //   link: "/contact",
-  // },
+  {
+    title: "Contact",
+    link: "/contact",
+  },
 ];
 
 const Navbar = () => {

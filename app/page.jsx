@@ -24,13 +24,13 @@ const page = () => {
 
   return (
     <div className="w-full h-full relative bg-muted/40">
-      <div className="w-full max-md:hidden"></div>
+      <div className="w-5/12 h-full max-md:hidden bg-[#e6dace] dark:bg-muted"></div>
       <div className="card md:w-[600px] md:h-[450px] w-full h-full flex md:absolute md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 shadow-2xl">
-        <div className="w-1/2 bg-blue-600/90 text-white dark:bg-blue-800/20 flex flex-col justify-between items-center">
+        <div className="w-1/2 bg-[#e6dace] dark:bg-muted flex flex-col justify-between items-center">
           <div className="h-full flex flex-col items-center justify-center gap-6 p-4">
             <div className="img w-32 h-32 bg-background rounded-full flex items-center justify-center overflow-hidden">
               {!user ? (
-                <Skeleton className="w-[110px] h-[110px] rounded-full" />
+                <Skeleton className="w-[110px] h-[110px] rounded-full " />
               ) : (
                 <Image
                   src={user.profile}
@@ -42,7 +42,7 @@ const page = () => {
             </div>
             <div className="name text-2xl font-bold capitalize">
               {!user ? (
-                <Skeleton className="w-[160px] h-[30px] rounded" />
+                <Skeleton className="w-[160px] h-[30px] rounded dark:bg-background" />
               ) : (
                 user.name
               )}
@@ -50,7 +50,7 @@ const page = () => {
             <div className="devider w-20 h-[2px] bg-white rounded"></div>
             <div className="job text-xl font-light uppercase">
               {!user ? (
-                <Skeleton className="w-[120px] h-[25px] rounded" />
+                <Skeleton className="w-[120px] h-[25px] rounded dark:bg-background" />
               ) : (
                 user.job
               )}
