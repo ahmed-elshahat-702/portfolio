@@ -5,10 +5,10 @@ textarea {
 .input-div {
   @apply flex flex-col gap-2;
 }
-.reqiured {
+.required {
   @apply text-red-600;
 }
 
-.error{
+.error {
   @apply text-red-600 text-sm;
 }
