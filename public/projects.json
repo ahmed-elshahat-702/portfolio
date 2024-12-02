@@ -2,86 +2,50 @@
   {
     "name": "Random Advice Generator",
     "link": "https://bondok-random-advice.vercel.app",
-    "info": "random advice generator app with API. onload you have a advice from many advices, and you can press on shuffle to get another random advice",
+    "info": "random advice generator app using advices API. you can get more than +300 advice to make you more better in your life.",
     "image": "/images/random_advice.png"
   },
   {
     "name": "Age Calculator",
     "link": "https://bondok-age-calculator.vercel.app",
-    "info": "age calculator app by enter your age in age fields and get result",
+    "info": "Enhanced age calculator app to perfectly calculate uour age, resonsive and modern styled.",
     "image": "/images/age_calculator.png"
   },
   {
     "name": "Hang Man",
     "link": "https://bondok-hang-man.vercel.app",
-    "info": "hang man game with arabic countries",
+    "info": "hang man game using arabic countries. responsive for all devices.",
     "image": "/images/hang_man.png"
-  },
-  {
-    "name": "Elzero Template 3",
-    "link": "https://bondok-template-3.vercel.app",
-    "info": "elzero template 3 cloning",
-    "image": "/images/template_3.png"
   },
   {
     "name": "Weather App",
     "link": "https://bondok-weather-app.vercel.app",
-    "info": "weather app with API, with city name field to search city wether, light and dark mode",
+    "info": "weather app using wather API, just enter your city nd get the weather.",
     "image": "/images/weather_app.png"
   },
   {
     "name": "Todo List",
     "link": "https://bondok-todo-list.vercel.app",
-    "info": "todo list with modern design, complete and clear completed todos with filter",
+    "info": "todo list with modern design. add your tasks and make your work better.",
     "image": "/images/todo_list.png"
-  },
-  {
-    "name": "Interactive Card Details",
-    "link": "https://bondok-interactive-card-details.vercel.app",
-    "info": "interactive card details to check visa card if valid and add it",
-    "image": "/images/interactive_card_details.png"
-  },
-  {
-    "name": "Memory Game",
-    "link": "https://bondok-memory-game.vercel.app",
-    "info": "memory game with social icons",
-    "image": "/images/memory_game.png"
   },
   {
     "name": "Multi Step Form",
     "link": "https://bondok-multi-step-form.vercel.app",
-    "info": "multi step form with JS",
+    "info": "multi-step form with fields validation functionality.",
     "image": "/images/multi_step_form.png"
-  },
-  {
-    "name": "Results Summary",
-    "link": "https://bondok-results-summary.vercel.app",
-    "info": "results summary",
-    "image": "/images/results_summary.png"
-  },
-  {
-    "name": "Product Preview Card Component",
-    "link": "https://bondok-product-preview-card-component.vercel.app",
-    "info": "product preview card component",
-    "image": "/images/product_preview_card_component.png"
   },
   {
     "name": "Wall Clock",
     "link": "https://bondok-wall-clock.vercel.app",
-    "info": "wall clock with modern design",
+    "info": "it is just a wall clock design.",
     "image": "/images/wall_clock.png"
   },
   {
     "name": "Calculator",
     "link": "https://bondok-calculator.vercel.app",
-    "info": "calculator app with modern design",
+    "info": "modern design calculator app.",
     "image": "/images/calculator.png"
-  },
-  {
-    "name": "Cursor Animation",
-    "link": "https://bondok-cursor-animation.vercel.app",
-    "info": "cursor animation app with modern design only for desktop devices",
-    "image": "/images/cursor_animation.png"
   },
   {
     "name": "Digital Clock",
@@ -98,14 +62,8 @@
   {
     "name": "Flower",
     "link": "https://bondok-flower.vercel.app",
-    "info": "flower draw with CSS, with animation",
+    "info": "flower draw with CSS, using animation.",
     "image": "/images/flower.png"
-  },
-  {
-    "name": "Interactive Rating Component",
-    "link": "https://bondok-interactive-rating-component.vercel.app",
-    "info": "interactive rating component",
-    "image": "/images/interactive_rating_component.png"
   },
   {
     "name": "Shop System",

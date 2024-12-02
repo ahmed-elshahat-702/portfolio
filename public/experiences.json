@@ -5,6 +5,22 @@
     "skill": "Front-End",
     "level": "intermediate",
     "site": "online",
-    "info": "With three years of dedicated experience in front-end development, I have honed my skills to deliver engaging and user-friendly web experiences. My proficiency encompasses a wide range of technologies, including HTML5, CSS3, JavaScript, and more..., allowing me to craft responsive and visually appealing websites that seamlessly adapt to various screen sizes and devices. I am well-versed in modern web development frameworks such as React and Next.js, enabling me to create dynamic and interactive user interfaces."
+    "info": "Over the course of the past three years, my journey into front-end development has been an enriching and transformative experience. Starting as a novice, I embarked on a dedicated path of self-improvement and education, immersing myself in the ever-evolving world of web development. Through countless hours of learning and practice, I have cultivated a strong foundation in front-end technologies, including HTML, CSS, JavaScript, and more. I've grasped the intricacies of responsive design, enabling me to create websites that adapt seamlessly across different devices and screen sizes. Furthermore, my continuous exploration of frameworks like React and Next.js has allowed me to build dynamic and interactive web applications. This learning process has not only equipped me with technical skills but also fostered problem-solving abilities and a keen eye for detail. I'm excited to leverage this knowledge and continue my journey in front-end development, contributing to innovative and user-centric web experiences."
+  },
+  {
+    "start_time": "2023",
+    "end_time": "present",
+    "skill": "Back-End",
+    "level": "intermediate",
+    "site": "online",
+    "info": "learning back-end was not easy, but with continuos learning and motivation i can now write that I learned it proudly. Now I have experence in Exprss.js, Mongodb, and Node.js"
+  },
+  {
+    "start_time": "2021",
+    "end_time": "2026",
+    "skill": "Nursing",
+    "level": "Senior",
+    "site": "NINU",
+    "info": "To become senior nurse I tired alot. Now I'm Nurse"
   }
 ]
