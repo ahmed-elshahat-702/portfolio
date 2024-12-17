@@ -24,57 +24,15 @@
     "image": "/images/weather_app.png"
   },
   {
-    "name": "Todo List",
-    "link": "https://bondok-todo-list.vercel.app",
-    "info": "todo list with modern design. add your tasks and make your work better.",
-    "image": "/images/todo_list.png"
-  },
-  {
-    "name": "Multi Step Form",
-    "link": "https://bondok-multi-step-form.vercel.app",
-    "info": "multi-step form with fields validation functionality.",
-    "image": "/images/multi_step_form.png"
-  },
-  {
     "name": "Wall Clock",
     "link": "https://bondok-wall-clock.vercel.app",
     "info": "it is just a wall clock design.",
     "image": "/images/wall_clock.png"
   },
   {
-    "name": "Calculator",
-    "link": "https://bondok-calculator.vercel.app",
-    "info": "modern design calculator app.",
-    "image": "/images/calculator.png"
-  },
-  {
-    "name": "Digital Clock",
-    "link": "https://bondok-digital-clock.vercel.app",
-    "info": "digital clock",
-    "image": "/images/digital_clock.png"
-  },
-  {
-    "name": "Ferb",
-    "link": "https://bondok-ferb.vercel.app",
-    "info": "ferb draw with CSS",
-    "image": "/images/ferb.png"
-  },
-  {
-    "name": "Flower",
-    "link": "https://bondok-flower.vercel.app",
-    "info": "flower draw with CSS, using animation.",
-    "image": "/images/flower.png"
-  },
-  {
     "name": "Shop System",
     "link": "https://bondok-shop-system.vercel.app",
     "info": "system for your market, only for desktop devices",
     "image": "/images/shop_system.png"
-  },
-  {
-    "name": "Portfolio Template 2",
-    "link": "https://bondok-template-2.vercel.app",
-    "info": "another portfolio template with side navbar",
-    "image": "/images/template_2.png"
   }
 ]
