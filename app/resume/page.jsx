@@ -72,7 +72,7 @@ const page = () => {
         </div>
         <div>
           <h1 className="font-bold text-2xl mb-4">Skills</h1>
-          <div className="bg-background shadow h-fit w-full p-8 grid grid-cols-3 max-sm:grid-cols-2 max-[350px]:grid-cols-1 gap-4">
+          <div className="bg-background shadow-sm h-fit w-full p-8 grid grid-cols-3 max-sm:grid-cols-2 max-[350px]:grid-cols-1 gap-4">
             {skills ? (
               skills.map((skill, index) => (
                 <SkillCard key={index} skill={skill} />

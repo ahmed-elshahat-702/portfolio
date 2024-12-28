@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const ProjectCard = ({ project }) => {
   return (
-    <div className="bg-background shadow h-fit w-full">
+    <div className="bg-background shadow-sm h-fit w-full">
       <div className="py-4">
         <div className="header border-l-8 border-blue-600 text-blue-600 pl-2 flex flex-col gap-2">
           <h1 className="text-2xl max-sm:text-lg font-bold capitalize">

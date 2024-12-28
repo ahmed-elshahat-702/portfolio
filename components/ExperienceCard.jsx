@@ -3,7 +3,7 @@ import { Skeleton } from "./ui/skeleton";
 
 const ExperienceCard = ({ experience }) => {
   return (
-    <div className="bg-background shadow h-fit w-full md:flex max-sm:p-4 p-8">
+    <div className="bg-background shadow-sm h-fit w-full md:flex max-sm:p-4 p-8">
       <div className="md:flex-1 space-y-1">
         <h1 className="text-lg font-bold text-blue-600">
           {!experience ? (

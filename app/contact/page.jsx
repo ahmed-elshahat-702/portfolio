@@ -122,7 +122,7 @@ const Page = () => {
         </div>
         <form
           ref={form}
-          className="bg-background shadow p-12 capitalize font-bold flex flex-col gap-5"
+          className="bg-background shadow-sm p-12 capitalize font-bold flex flex-col gap-5"
           onSubmit={sendEmail}
         >
           <div className="flex max-md:flex-col gap-4">
