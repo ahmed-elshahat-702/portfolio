@@ -2,20 +2,21 @@
 
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ProjectCard from "@/components/ProjectCard";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 const page = () => {
   const [projects, setProjects] = useState();
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      const res = await fetch("/projects.json");
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
+    async function fetchProjects() {
+      try {
+        const res = await axios.get("/api/projects");
+        setProjects(res.data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
       }
-      const data = await res.json();
-      setProjects(data);
-    };
+    }
     fetchProjects();
   }, []);
   return (

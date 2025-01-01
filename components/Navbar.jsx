@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import ThemeToggler from "./ThemeToggler";
 import { Skeleton } from "./ui/skeleton";
+import axios from "axios";
 const navLinks = [
   {
     title: "About Me",
@@ -37,12 +38,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetUserData = async () => {
-      const res = await fetch("/user.json");
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
+      try {
+        const res = await axios.get("/api/user-info");
+        setUser(res.data[0]);
+      } catch (error) {
+        console.error("Failed to fetch data", error);
       }
-      const data = await res.json();
-      setUser(data);
     };
     fetUserData();
   }, []);

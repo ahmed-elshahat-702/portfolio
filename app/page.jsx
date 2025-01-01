@@ -6,18 +6,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FaFacebook, FaGithub, FaYoutube } from "react-icons/fa";
+import axios from "axios";
 
 const page = () => {
   const [user, setUser] = useState();
 
   useEffect(() => {
     const fetUserData = async () => {
-      const res = await fetch("/user.json");
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
+      try {
+        const response = await axios.get("/api/user-info");
+        setUser(response.data[0]);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
-      const data = await res.json();
-      setUser(data);
     };
     fetUserData();
   }, []);
