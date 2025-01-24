@@ -12,9 +12,9 @@ Here you'll find a collection of my work and contributions. Each project demonst
 
 ## Contact
 
-- GitHub: [text](https://github.com/ahmed-elshahat-702)
-- LinkedIn: [text](https://www.linkedin.com/in/ahmed-elshahat-bondok)
-- Email: ahmedelshaht702@gmail.com
+- [![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/ahmed-elshahat-702)
+- [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmed-elshahat-bondok)
+- 📧 [ahmedelshaht702@gmail.com](mailto:ahmedelshaht702@gmail.com)
 
 Feel free to explore my projects and reach out for collaboration opportunities!
 
