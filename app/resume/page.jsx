@@ -1,14 +1,17 @@
 "use client";
-import EducationCard from "@/components/EducationCard";
-import ExperienceCard from "@/components/ExperienceCard";
+import MaxWidthContainer from "@/components/MaxWidthContainer";
+import ResumeCard from "@/components/ResumeCard";
 import SkillCard from "@/components/SkillCard";
+import Square from "@/components/Square";
+import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const page = () => {
-  const [experiences, setExperiences] = useState();
-  const [education, setEducation] = useState();
-  const [skills, setSkills] = useState();
+  const toast = useToast();
+  const [experiences, setExperiences] = useState(null);
+  const [education, setEducation] = useState(null);
+  const [skills, setSkills] = useState(null);
 
   useEffect(() => {
     const fetchExperiences = async () => {
@@ -16,7 +19,11 @@ const page = () => {
         const res = await axios.get("/api/experiences");
         setExperiences(res.data);
       } catch (error) {
-        console.error("Error fetching experiences:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          message: "Failed to fetch experiences",
+        });
       }
     };
 
@@ -25,7 +32,11 @@ const page = () => {
         const res = await axios.get("/api/education");
         setEducation(res.data);
       } catch (error) {
-        console.error("Error fetching education:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          message: "Failed to fetch education",
+        });
       }
     };
     const fetchSkills = async () => {
@@ -33,7 +44,11 @@ const page = () => {
         const res = await axios.get("/api/skills");
         setSkills(res.data);
       } catch (error) {
-        console.error("Error fetching skills:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          message: "Failed to fetch skills",
+        });
       }
     };
 
@@ -42,49 +57,62 @@ const page = () => {
     fetchSkills();
   }, []);
   return (
-    <div className="w-full min-h-full bg-[#e6dace] dark:bg-muted/40 flex flex-col items-center p-8 max-sm:px-4">
-      <div className="w-[700px] mx-auto h-full max-lg:w-5/6 max-sm:w-full flex flex-col gap-20">
-        <div className="heading text-center flex flex-col gap-20 items-center">
-          <div className="flex gap-2 items-baseline font-bold w-fit pl-4">
-            <div className="w-4 h-4 bg-blue-600"></div>
-            <h1 className="text-4xl">Resume</h1>
-          </div>
-        </div>
-        <div className="experiences">
-          <h1 className="font-bold text-2xl mb-4">Experiences</h1>
-          {experiences ? (
-            experiences.map((experience, index) => (
-              <ExperienceCard key={index} experience={experience} />
-            ))
-          ) : (
-            <ExperienceCard />
-          )}
-        </div>
-        <div>
-          <h1 className="font-bold text-2xl mb-4">Education</h1>
-
-          {education ? (
-            education.map((education, index) => (
-              <EducationCard key={index} education={education} />
-            ))
-          ) : (
-            <EducationCard />
-          )}
-        </div>
-        <div>
-          <h1 className="font-bold text-2xl mb-4">Skills</h1>
-          <div className="bg-background shadow-sm h-fit w-full p-8 grid grid-cols-3 max-sm:grid-cols-2 max-[350px]:grid-cols-1 gap-4">
-            {skills ? (
-              skills.map((skill, index) => (
-                <SkillCard key={index} skill={skill} />
-              ))
-            ) : (
-              <SkillCard />
-            )}{" "}
-          </div>
+    <MaxWidthContainer className={"space-y-12"}>
+      <div className="heading text-center flex flex-col gap-20 items-center">
+        <div className="flex gap-2 items-baseline font-bold w-fit pl-4">
+          <Square />
+          <h1 className="text-4xl">Resume</h1>
         </div>
       </div>
-    </div>
+      <div className="experiences">
+        <h1 className="font-bold text-2xl mb-4 flex items-center gap-1">
+          <span className="text-main">"</span>
+          Experiences
+          <span className="text-main">"</span>
+        </h1>
+        <div className="flex flex-col gap-2">
+          {experiences ? (
+            experiences.map((experiences, index) => (
+              <ResumeCard key={index} data={experiences} />
+            ))
+          ) : (
+            <ResumeCard />
+          )}
+        </div>
+      </div>
+      <div>
+        <h1 className="font-bold text-2xl mb-4 flex items-center gap-1">
+          <span className="text-main">"</span>
+          Education
+          <span className="text-main">"</span>
+        </h1>
+        <div className="flex flex-col gap-2">
+          {education ? (
+            education.map((education, index) => (
+              <ResumeCard key={index} data={education} />
+            ))
+          ) : (
+            <ResumeCard />
+          )}
+        </div>
+      </div>
+      <div>
+        <h1 className="font-bold text-2xl mb-4 flex items-center gap-1">
+          <span className="text-main">"</span>
+          Skills
+          <span className="text-main">"</span>
+        </h1>
+        <div className="bg-background shadow-sm h-fit w-full p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {skills ? (
+            skills.map((skill, index) => (
+              <SkillCard key={index} skill={skill} />
+            ))
+          ) : (
+            <SkillCard />
+          )}
+        </div>
+      </div>
+    </MaxWidthContainer>
   );
 };
 

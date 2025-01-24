@@ -1,38 +1,37 @@
-import React from "react";
 import { Skeleton } from "./ui/skeleton";
 
-const EducationCard = ({ education }) => {
+const ResumeCard = ({ data }) => {
   return (
-    <div className="bg-background shadow-sm h-fit w-full md:flex p-8">
+    <div className="bg-background shadow-sm h-fit w-full md:flex max-sm:p-4 p-8">
       <div className="md:flex-1 space-y-1">
-        <h1 className="text-lg font-bold text-blue-600">
-          {!education ? (
+        <h1 className="text-lg font-bold text-main">
+          {!data ? (
             <Skeleton className="w-[100px] h-[25px] rounded" />
           ) : (
-            `${education.start_time} - ${education.end_time}`
+            `${data.start_time} - ${data.end_time}`
           )}
         </h1>
         <h3 className="font-bold">
-          {!education ? (
+          {!data ? (
             <Skeleton className="w-[60px] h-[25px] rounded" />
           ) : (
-            education.skill
+            data.skill
           )}
         </h3>
 
-        {!education ? (
+        {!data ? (
           <Skeleton className="w-[80px] h-[20px] rounded" />
         ) : (
-          <p>{education.level} </p>
+          <p>{data.level} </p>
         )}
-        {!education ? (
+        {!data ? (
           <Skeleton className="w-[80px] h-[20px] rounded" />
         ) : (
-          <p className="text-blue-600 font-semibold">{education.site}</p>
+          <p className="text-main font-semibold">{data.site}</p>
         )}
       </div>
-      <div className="pl-4 py-2 md:flex-1">
-        {!education ? (
+      <div className="py-2 md:flex-1">
+        {!data ? (
           <div className="flex flex-col gap-2">
             <Skeleton className="w-full h-[20px] rounded" />
             <Skeleton className="w-5/6 h-[20px] rounded" />
@@ -42,11 +41,11 @@ const EducationCard = ({ education }) => {
             <Skeleton className="w-full h-[20px] rounded" />
           </div>
         ) : (
-          education.info
+          data.description
         )}
       </div>
     </div>
   );
 };
 
-export default EducationCard;
+export default ResumeCard;
