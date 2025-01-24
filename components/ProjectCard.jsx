@@ -1,25 +1,34 @@
+import { ExternalLink, LinkIcon } from "lucide-react";
 import Image from "next/image";
-import { Skeleton } from "./ui/skeleton";
 import Link from "next/link";
+import { Skeleton } from "./ui/skeleton";
 
 const ProjectCard = ({ project }) => {
   return (
-    <div className="bg-background shadow-sm h-fit w-full">
+    <div className="bg-background shadow-sm w-full max-w-[600px] h-full flex flex-col justify-between">
       <div className="py-4">
-        <div className="header border-l-8 border-blue-600 text-blue-600 pl-2 flex flex-col gap-2">
+        <div className="header border-l-8 border-main text-main p-2 flex flex-col gap-2">
           <h1 className="text-2xl max-sm:text-lg font-bold capitalize">
             {!project ? (
-              <Skeleton className="w-[250px] h-[30px] rounded" />
+              <Skeleton className="w-[250px] max-w-full h-[30px] rounded" />
             ) : (
               project.name
             )}
           </h1>
           <h3 className="max-sm:text-sm font-bold lowercase">
             {!project ? (
-              <Skeleton className="w-[400px] h-[25px] rounded" />
+              <Skeleton className="w-[400px] max-w-full h-[25px] rounded" />
             ) : (
               <Link href={project.link} target="_blank">
-                {project.link}
+                <div className="flex items-center space-x-2">
+                  <span>
+                    <LinkIcon className="w-4 h-4" />
+                  </span>
+                  <span>{project.link}</span>
+                  <span>
+                    <ExternalLink className="w-4 h-4" />
+                  </span>
+                </div>
               </Link>
             )}
           </h3>
