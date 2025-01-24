@@ -1,15 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "./ui/button";
-import ThemeToggler from "./ThemeToggler";
-import { Skeleton } from "./ui/skeleton";
+import { cn } from "@/lib/utils";
 import axios from "axios";
+import { Menu, PanelTopClose } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import Square from "./Square";
+import ThemeToggler from "./ThemeToggler";
+import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { Skeleton } from "./ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 const navLinks = [
   {
-    title: "About Me",
+    title: "Home",
     link: "/",
   },
   {
@@ -27,9 +32,12 @@ const navLinks = [
 ];
 
 const Navbar = () => {
+  const tooast = useToast();
+
   const [active, setActive] = useState("/");
   const [isCollapsed, setIsCollapsed] = useState(true);
   const path = usePathname();
+  const router = useRouter();
   useEffect(() => {
     setActive(path);
   }, [path]);
@@ -42,7 +50,11 @@ const Navbar = () => {
         const res = await axios.get("/api/user-info");
         setUser(res.data[0]);
       } catch (error) {
-        console.error("Failed to fetch data", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          message: "Error fetching user data",
+        });
       }
     };
     fetUserData();
@@ -50,16 +62,19 @@ const Navbar = () => {
 
   return (
     <header
-      className={`w-full min-h-2 py-6 px-10 shadow transition flex items-center justify-between
-                max-lg:items-start max-lg:flex-col max-lg:gap-6 bg-background
-      ${isCollapsed ? "" : ""}
-    `}
+      className={cn(
+        "w-full py-6 px-4 md:px-10 shadow flex items-center justify-between max-lg:items-start max-lg:flex-col max-lg:gap-4 bg-background"
+      )}
     >
       <div className="flex items-center justify-between max-lg:w-full">
         <div className="flex items-center gap-3">
           <ThemeToggler />
           <div className="flex items-center gap-1">
-            <div className="w-4 h-4 bg-blue-600"></div>
+            <Square
+              onDoubleClick={() => {
+                router.push("/dashboard");
+              }}
+            />
             <Link
               href={"/"}
               className="flex items-center gap-1 max-sm:items-start max-sm:flex-col max-sm:gap-0"
@@ -72,7 +87,7 @@ const Navbar = () => {
                 )}
               </span>
               <div className="text-gray-500 font-bold sm:text-sm max-sm:text-xs mb-0 flex items-center justify-center">
-                /{" "}
+                <span className="mx-1">/</span>
                 {!user ? (
                   <Skeleton className="w-[100px] h-[20px] rounded ml-1" />
                 ) : (
@@ -89,37 +104,38 @@ const Navbar = () => {
               setIsCollapsed(!isCollapsed);
             }}
           >
-            <div
-              className="relative w-10 h-1 bg-blue-600 rounded-full 
-            before:content-[''] before:absolute before:w-1/2 before:h-1 before:-top-3 before:left-0 before:bg-blue-600 before:rounded-full
-            after:content-[''] after:absolute after:w-1/2 after:h-1 after:top-3 after:right-0 after:bg-blue-600 after:rounded-full
-            "
-            ></div>
+            {isCollapsed ? (
+              <Menu className="text-main w-7 h-7" />
+            ) : (
+              <PanelTopClose className="text-main w-7 h-7" />
+            )}
           </Button>
         </div>
       </div>
       <div
-        className={` transition flex items-center gap-3
-        max-lg:items-start  max-lg:flex-col max-lg:gap-3
-        ${isCollapsed ? "max-lg:hidden" : "max-lg:flex"}
-      `}
+        className={cn(
+          "transition flex items-center gap-3 max-lg:items-start max-lg:flex-col max-lg:gap-3",
+          isCollapsed ? "max-lg:hidden" : "max-lg:flex max-lg:w-full"
+        )}
       >
-        <div className="flex items-center max-lg:items-start gap-3 max-lg:flex-col">
+        <div className="w-full flex items-center gap-3 max-lg:flex-col">
           {navLinks.map((link, index) => (
-            <Link
-              key={index}
-              href={link.link}
-              className={`
-          text-lg transition
-          ${
-            active === link.link
-              ? "text-blue-600 font-semibold border-b"
-              : "text-gray-500 hover:border-b"
-          }
-          `}
-            >
-              {link.title}
-            </Link>
+            <React.Fragment key={index}>
+              <Link
+                href={link.link}
+                className={cn(
+                  "text-lg transition border-dashed hover:border-b-2 hover:border-main",
+                  active === link.link
+                    ? "text-main font-semibold border-b-2 border-main"
+                    : "text-muted-foreground"
+                )}
+              >
+                {link.title}
+              </Link>
+              {index !== navLinks.length - 1 && (
+                <Separator className="w-0 h-0 lg:w-px lg:h-6" />
+              )}
+            </React.Fragment>
           ))}
         </div>
       </div>
