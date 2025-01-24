@@ -32,7 +32,7 @@ const navLinks = [
 ];
 
 const Navbar = () => {
-  const tooast = useToast();
+  const toast = useToast();
 
   const [active, setActive] = useState("/");
   const [isCollapsed, setIsCollapsed] = useState(true);
