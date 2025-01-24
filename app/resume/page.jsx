@@ -2,38 +2,39 @@
 import EducationCard from "@/components/EducationCard";
 import ExperienceCard from "@/components/ExperienceCard";
 import SkillCard from "@/components/SkillCard";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
   const [experiences, setExperiences] = useState();
-  const [educations, setEducations] = useState();
+  const [education, setEducation] = useState();
   const [skills, setSkills] = useState();
 
   useEffect(() => {
     const fetchExperiences = async () => {
-      const res = await fetch("/experiences.json");
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
+      try {
+        const res = await axios.get("/api/experiences");
+        setExperiences(res.data);
+      } catch (error) {
+        console.error("Error fetching experiences:", error);
       }
-      const data = await res.json();
-      setExperiences(data);
     };
 
     const fetchEducation = async () => {
-      const res = await fetch("/educations.json");
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
+      try {
+        const res = await axios.get("/api/education");
+        setEducation(res.data);
+      } catch (error) {
+        console.error("Error fetching education:", error);
       }
-      const data = await res.json();
-      setEducations(data);
     };
     const fetchSkills = async () => {
-      const res = await fetch("/skills.json");
-      if (!res.ok) {
-        throw new Error("Failed to fetch data");
+      try {
+        const res = await axios.get("/api/skills");
+        setSkills(res.data);
+      } catch (error) {
+        console.error("Error fetching skills:", error);
       }
-      const data = await res.json();
-      setSkills(data);
     };
 
     fetchExperiences();
@@ -62,8 +63,8 @@ const page = () => {
         <div>
           <h1 className="font-bold text-2xl mb-4">Education</h1>
 
-          {educations ? (
-            educations.map((education, index) => (
+          {education ? (
+            education.map((education, index) => (
               <EducationCard key={index} education={education} />
             ))
           ) : (
