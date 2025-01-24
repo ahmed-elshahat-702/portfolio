@@ -1,6 +1,6 @@
+import { connectToDatabase } from "@/lib/db";
 import Skill from "@/lib/models/Skill";
 import { NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/db";
 
 export async function GET(request) {
   await connectToDatabase();

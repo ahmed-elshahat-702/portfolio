@@ -1,15 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import MaxWidthContainer from "@/components/MaxWidthContainer";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
+import axios from "axios";
+import { Facebook, GithubIcon, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { FaFacebook, FaGithub, FaYoutube } from "react-icons/fa";
-import axios from "axios";
 
 const page = () => {
   const [user, setUser] = useState();
+  const toast = useToast();
 
   useEffect(() => {
     const fetUserData = async () => {
@@ -17,27 +22,30 @@ const page = () => {
         const response = await axios.get("/api/user-info");
         setUser(response.data[0]);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          message: "Error fetching user data",
+        });
       }
     };
     fetUserData();
   }, []);
 
   return (
-    <div className="w-full min-h-dvh relative bg-muted/40">
-      <div className="w-5/12 min-h-dvh max-sm:hidden bg-[#e6dace] dark:bg-muted"></div>
-      <div className="card sm:w-[600px] sm:h-[450px] flex max-sm:flex-col sm:absolute sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:shadow-2xl">
-        <div className="w-1/2 max-sm:w-full max-sm:h-1/2 bg-[#e6dace] dark:bg-muted flex flex-col justify-between items-center">
-          <div className="h-full flex flex-col items-center justify-center gap-6 p-4 max-sm:py-20">
+    <MaxWidthContainer className="bg-secondary-pink dark:bg-muted/40 flex items-center justify-center max-sm:py-0 max-sm:bg-primary-pink max-sm:w-full">
+      <div className="max-sm:w-full sm:w-10/12 md:w-2/3 h-[1000px] md:h-[450px] flex max-md:flex-col shadow sm:shadow-2xl">
+        <div className="flex-1 max-md:w-full max-md:h-1/2 bg-secondary-pink sm:bg-primary-pink dark:bg-muted flex flex-col justify-between items-center">
+          <div className="h-full flex flex-col items-center justify-center gap-6 p-4 max-md:py-10">
             <div className="img w-32 h-32 bg-background rounded-full flex items-center justify-center overflow-hidden">
               {!user ? (
                 <Skeleton className="w-[110px] h-[110px] rounded-full " />
               ) : (
                 <Image
-                  src={user.profile}
+                  src={user.avatar || "/images/avatar.png"}
                   width={130}
                   height={130}
-                  alt="profile"
+                  alt="avatar"
                 />
               )}
             </div>
@@ -57,7 +65,7 @@ const page = () => {
               )}
             </div>
           </div>
-          <div className="social w-full bg-background flex justify-center py-2 text-foreground">
+          <div className="social w-full h-fit bg-background flex justify-center py-2 text-foreground">
             {!user ? (
               <div className="flex items-center gap-2">
                 <Skeleton className="w-[35px] h-[35px] rounded-full" />
@@ -66,38 +74,55 @@ const page = () => {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Link href={user.facebook_link}>
-                  <Button variant="ghost" className="p-2">
-                    <FaFacebook className="text-2xl" />
-                  </Button>
+                <Link
+                  className={cn(buttonVariants({ variant: "ghost" }), "p-2")}
+                  href={user.facebook_link}
+                >
+                  <Facebook className="text-2xl" />
                 </Link>
-                <Link href={user.github_link}>
-                  <Button variant="ghost" className="p-2">
-                    <FaGithub className="text-2xl" />
-                  </Button>
+                <Separator className="w-px h-4" />
+                <Link
+                  className={cn(buttonVariants({ variant: "ghost" }))}
+                  href={user.github_link}
+                >
+                  <GithubIcon className="text-2xl" />
                 </Link>
-                <Link href={user.youtube_link}>
-                  <Button variant="ghost" className="p-2">
-                    <FaYoutube className="text-2xl" />
-                  </Button>
+                <Separator className="w-px h-4" />
+                <Link
+                  className={cn(buttonVariants({ variant: "ghost" }))}
+                  href={user.youtube_link}
+                >
+                  <Youtube className="text-2xl" />
                 </Link>
               </div>
             )}
           </div>
         </div>
-        <div className="w-1/2 max-sm:w-full max-sm:h-1/2 bg-background flex flex-col justify-center gap-5 p-4 max-sm:py-20">
-          <h1 className="font-bold text-6xl">Hello</h1>
-          <h3 className="font-medium text-xl">Here's who I am & what I do</h3>
-          <div className="flex gap-4">
-            <Link href="/projects">
-              <Button className="bg-blue-600 hover:bg-blue-800 dark:text-white rounded-full px-8">
-                projects
-              </Button>
+        <div className="flex-1 max-md:w-full max-md:h-1/2 bg-background flex flex-col justify-center gap-5 p-4">
+          <h1 className="font-bold text-3xl md:text-5xl lg:text-6xl">Hello</h1>
+          <h3 className="font-medium text-base md:text-lg lg:text-xl">
+            Here's who I am & what I do
+          </h3>
+          <div className="w-full flex gap-4">
+            <Link
+              href="/projects"
+              className={cn(
+                buttonVariants(),
+                "flex-1 bg-main hover:bg-main-hover dark:text-white rounded-full"
+              )}
+            >
+              projects
             </Link>
-            <Link href="/resume">
-              <Button variant="outline" className="px-8 rounded-full">
-                resume
-              </Button>
+            <Link
+              href="/resume"
+              className={cn(
+                buttonVariants({
+                  variant: "secondary",
+                }),
+                "flex-1 rounded-full"
+              )}
+            >
+              resume
             </Link>
           </div>
           <div>
@@ -116,7 +141,7 @@ const page = () => {
           </div>
         </div>
       </div>
-    </div>
+    </MaxWidthContainer>
   );
 };
 

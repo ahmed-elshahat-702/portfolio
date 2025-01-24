@@ -1,11 +1,11 @@
-import React from "react";
+import Square from "./Square";
 import { Skeleton } from "./ui/skeleton";
 
 const SkillCard = ({ skill }) => {
   return skill ? (
     <div className=" font-semibold w-fit pl-4 flex items-center gap-2">
-      <div className="w-4 h-4 bg-blue-600"></div>
-      <h1>{skill.text}</h1>
+      <Square />
+      <h1>{skill.name}</h1>
     </div>
   ) : (
     <>
