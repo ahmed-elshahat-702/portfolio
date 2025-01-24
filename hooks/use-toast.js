@@ -153,3 +153,5 @@ function useToast() {
 }
 
 export { toast, useToast };
+
+console.log("test");
