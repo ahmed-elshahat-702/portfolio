@@ -1,6 +1,6 @@
+import { connectToDatabase } from "@/lib/db";
 import Education from "@/lib/models/Education";
 import { NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/db";
 
 export async function GET(request) {
   await connectToDatabase();
