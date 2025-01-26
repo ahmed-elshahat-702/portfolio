@@ -1,13 +1,16 @@
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
+import Image from "next/image";
 import { useState } from "react";
 import { z } from "zod";
+import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
@@ -41,8 +44,21 @@ const formSchemas = {
 };
 
 const AddItemDialog = ({ open, onClose, onSave, type }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    link: "",
+    image: "",
+  });
   const [errors, setErrors] = useState({});
+  const [imageUrl, setImageUrl] = useState(null);
+  const [actualFile, setActualFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { toast } = useToast();
+
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+  const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif"];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,19 +66,117 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleSave = () => {
+  const handleImageChange = (e) => {
+    if (e.target.files?.[0]) {
+      const file = e.target.files[0];
+
+      if (
+        file.size > MAX_FILE_SIZE ||
+        !ALLOWED_FILE_TYPES.includes(file.type)
+      ) {
+        toast({
+          title: "Invalid file",
+          description:
+            "Image must be less than 10MB and of type JPEG, PNG, or GIF",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Revoke old URL if exists
+      if (imageUrl) {
+        URL.revokeObjectURL(imageUrl);
+      }
+
+      const newUrl = URL.createObjectURL(file);
+      setImageUrl(newUrl);
+      setActualFile(file);
+
+      // Update formData with image URL
+      setFormData((prev) => ({
+        ...prev,
+        image: newUrl,
+      }));
+    }
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
     try {
-      const validatedData = formSchemas[type].parse(formData);
-      onSave(validatedData);
+      let uploadedImageUrl = "";
+
+      if (actualFile) {
+        try {
+          const uploadFormData = new FormData();
+          uploadFormData.append("file", actualFile);
+
+          toast({
+            title: "Uploading image",
+            description: "Please wait while we upload your image.",
+          });
+
+          const response = await axios.post("/api/upload", uploadFormData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          });
+
+          uploadedImageUrl =
+            response.data?.result?.secure_url || response.data?.result?.url;
+
+          setFormData((prev) => ({
+            ...prev,
+            image: uploadedImageUrl,
+          }));
+
+          toast({
+            title: "Success",
+            description: "Image uploaded successfully",
+          });
+        } catch (error) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Failed to upload image.",
+          });
+          console.error(error);
+          return;
+        }
+      }
+
+      const validatedData = formSchemas[type].parse({
+        ...formData,
+        image: uploadedImageUrl || formData.image,
+      });
+
+      await onSave(validatedData);
+
+      toast({
+        title: "Success",
+        description: `${type} added successfully`,
+      });
+
+      // Reset form
       setFormData({});
+      setImageUrl("");
+      setActualFile(null);
       setErrors({});
-      onClose(false);
+      onClose();
     } catch (error) {
       const formattedErrors = {};
-      error.errors.forEach((err) => {
-        formattedErrors[err.path[0]] = err.message;
-      });
-      setErrors(formattedErrors);
+      if (error.errors) {
+        error.errors.forEach((err) => {
+          formattedErrors[err.path[0]] = err.message;
+        });
+        setErrors(formattedErrors);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to save data",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -73,13 +187,36 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
           {label}
         </Label>
         <div className="col-span-3">
-          <Input
-            id={name}
-            name={name}
-            value={formData[name] || ""}
-            onChange={handleChange}
-            className={errors[name] ? "border-red-500" : ""}
-          />
+          {name === "image" ? (
+            <div>
+              <Input
+                id={name}
+                name={name}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className={errors[name] ? "border-red-500" : ""}
+              />
+              {imageUrl && (
+                <div className="relative w-full h-[200px]">
+                  <Image
+                    src={imageUrl}
+                    alt="Preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            <Input
+              id={name}
+              name={name}
+              value={formData[name] || ""}
+              onChange={handleChange}
+              className={errors[name] ? "border-red-500" : ""}
+            />
+          )}
           {errors[name] && (
             <p className="text-sm text-red-500 mt-1">{errors[name]}</p>
           )}
@@ -127,7 +264,9 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
           <Button variant="outline" onClick={() => onClose(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
+            Submit
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

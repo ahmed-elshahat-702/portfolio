@@ -20,14 +20,30 @@ export async function POST(request) {
   await connectToDatabase();
 
   try {
-    const newProject = new Project(await request.json());
-    await newProject.save();
-    return NextResponse.json(newProject);
+    const formData = await request.formData();
+
+    // Convert FormData to object
+    const projectData = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      link: formData.get("link"),
+      image: formData.get("image"),
+    };
+
+    // Create new project
+    const newProject = new Project(projectData);
+    const savedProject = await newProject.save();
+
+    return NextResponse.json(savedProject, { status: 201 });
   } catch (error) {
-    return NextResponse.json({
-      message: "Error creating project",
-      error: error.message,
-    });
+    console.error("Project creation error:", error);
+    return NextResponse.json(
+      {
+        message: "Error creating project",
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }
 

@@ -44,10 +44,10 @@ export default function Dashboard() {
     fetchExperiences,
     fetchEducation,
     fetchSkills,
-    addProjects,
-    addExperiences,
+    addProject,
+    addExperience,
     addEducation,
-    addSkills,
+    addSkill,
   } = useStore();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -62,24 +62,38 @@ export default function Dashboard() {
     setDialogOpen(false);
   };
 
-  const handleDialogSave = (data) => {
-    switch (dialogType) {
-      case "Project":
-        addProjects(data);
-        break;
-      case "Experience":
-        addExperiences(data);
-        break;
-      case "Education":
-        addEducation(data);
-        break;
-      case "Skill":
-        addSkills(data);
-        break;
-      default:
-        break;
+  const handleDialogSave = async (data) => {
+    try {
+      switch (dialogType) {
+        case "Project":
+          await addProject(data);
+          await fetchProjects();
+          break;
+        case "Experience":
+          await addExperience(data);
+          await fetchExperiences();
+          break;
+        case "Education":
+          await addEducation(data);
+          await fetchEducation();
+          break;
+        case "Skill":
+          await addSkill(data);
+          await fetchSkills();
+          break;
+        default:
+          break;
+      }
+
+      setDialogOpen(false);
+    } catch (error) {
+      console.error("Save error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save data",
+      });
     }
-    setDialogOpen(false);
   };
 
   useEffect(() => {
@@ -95,15 +109,14 @@ export default function Dashboard() {
         } catch (error) {
           toast({
             variant: "destructive",
-            title: "Failed",
-            message: "Failed to fetch data",
+            title: "Error",
+            description: "Failed to fetch data",
           });
         }
       };
-
       fetchAllData();
     }
-  }, [status]);
+  }, [status, fetchProjects, fetchExperiences, fetchEducation, fetchSkills]);
 
   if (status === "loading") {
     return (
@@ -246,7 +259,7 @@ export default function Dashboard() {
             {projects && (
               <div className="w-full h-full">
                 <Button
-                  variant="ghost"
+                  variant="gh</TabsContent>ost"
                   className="w-full my-4 border-2 border-dashed border-main"
                   onClick={() => handleAddClick("Project")}
                 >
