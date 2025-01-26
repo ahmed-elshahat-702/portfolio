@@ -2,7 +2,7 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MaxWidthContainer from "@/components/MaxWidthContainer";
 import Square from "@/components/Square";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -77,69 +78,92 @@ export default function Signin() {
         <Square />
         <h1 className="text-4xl">Sign in</h1>
       </div>
-      <Card className=" w-full sm:w-96 rounded-none border-none shadow-sm py-4  font-bold">
+      <Card className=" w-full sm:w-96 p-2 font-bold">
         <CardHeader>
           <CardTitle>Dashboard Signin</CardTitle>
         </CardHeader>
         <CardContent>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 font-bold"
+            className="space-y-8 font-bold"
           >
             <div className="space-y-2">
-              <Label htmlFor="username">
-                Username <span className="text-red-600">*</span>
-              </Label>
-              <Input id="username" {...form.register("username")} />
-              {form.formState.errors.username && (
-                <p className="text-sm text-red-500">
-                  {form.formState.errors.username.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">
-                Password <span className="text-red-600">*</span>
-              </Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  {...form.register("password")}
-                />
-                <Button
-                  variant="ghost"
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 hover:bg-transparent"
-                >
-                  {showPassword ? (
-                    <Eye className="w-4 h-4" />
-                  ) : (
-                    <EyeOff className="w-4 h-4" />
-                  )}
-                </Button>
+              <div className="space-y-2">
+                <Label htmlFor="username">
+                  Username <span className="text-red-600">*</span>
+                </Label>
+                <Input id="username" {...form.register("username")} />
+                {form.formState.errors.username && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.username.message}
+                  </p>
+                )}
               </div>
-              {form.formState.errors.password && (
-                <p className="text-sm text-red-500">
-                  {form.formState.errors.password.message}
-                </p>
-              )}
+              <div className="space-y-2">
+                <Label htmlFor="password">
+                  Password <span className="text-red-600">*</span>
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    {...form.register("password")}
+                  />
+                  <Button
+                    variant="ghost"
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 hover:bg-transparent"
+                  >
+                    {showPassword ? (
+                      <Eye className="w-4 h-4" />
+                    ) : (
+                      <EyeOff className="w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
+                {form.formState.errors.password && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.password.message}
+                  </p>
+                )}
+              </div>
             </div>
-            <Button
-              type="submit"
-              className="w-full bg-main hover:bg-main-hover dark:text-white"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <LoadingSpinner className="mx-4 text-main-foreground" />{" "}
-                  Signing you in...
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
+            <div className="space-y-4">
+              <Button
+                type="submit"
+                className="w-full bg-main hover:bg-main-hover dark:text-white"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <LoadingSpinner className="mx-4 text-main-foreground" />{" "}
+                    Signing you in...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
+              <div className="relative text-center">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or
+                  </span>
+                </div>
+              </div>
+              <Link
+                href="/"
+                className={buttonVariants({
+                  variant: "secondary",
+                  className: "w-full",
+                })}
+              >
+                Back to Home
+              </Link>
+            </div>
           </form>
         </CardContent>
       </Card>

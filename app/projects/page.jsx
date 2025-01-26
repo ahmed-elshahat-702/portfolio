@@ -4,6 +4,14 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import MaxWidthContainer from "@/components/MaxWidthContainer";
 import ProjectCard from "@/components/ProjectCard";
 import Square from "@/components/Square";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -29,6 +37,17 @@ const page = () => {
   }, []);
   return (
     <MaxWidthContainer className={"space-y-12"}>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Projects</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="heading text-center flex flex-col gap-10 items-center">
         <div className="flex gap-2 items-center justify-center font-bold w-full">
           <Square />

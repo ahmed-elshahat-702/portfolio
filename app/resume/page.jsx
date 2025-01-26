@@ -3,6 +3,14 @@ import MaxWidthContainer from "@/components/MaxWidthContainer";
 import ResumeCard from "@/components/ResumeCard";
 import SkillCard from "@/components/SkillCard";
 import Square from "@/components/Square";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -58,6 +66,17 @@ const page = () => {
   }, []);
   return (
     <MaxWidthContainer className={"space-y-12"}>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Resume</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="heading text-center flex flex-col gap-20 items-center">
         <div className="flex gap-2 items-baseline font-bold w-fit pl-4">
           <Square />

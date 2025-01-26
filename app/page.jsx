@@ -1,6 +1,7 @@
 "use client";
 
 import MaxWidthContainer from "@/components/MaxWidthContainer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,22 +34,28 @@ const page = () => {
   }, []);
 
   return (
-    <MaxWidthContainer className="bg-secondary-pink dark:bg-muted/40 flex items-center justify-center max-sm:py-0 max-sm:bg-primary-pink max-sm:w-full">
+    <MaxWidthContainer className="bg-secondary-pink dark:bg-muted/40 flex items-center justify-center max-sm:py-0 max-sm:bg-primary-pink max-sm:w-full max-sm:px-0">
       <div className="max-sm:w-full sm:w-10/12 md:w-2/3 h-[1000px] md:h-[450px] flex max-md:flex-col shadow sm:shadow-2xl">
         <div className="flex-1 max-md:w-full max-md:h-1/2 bg-secondary-pink sm:bg-primary-pink dark:bg-muted flex flex-col justify-between items-center">
           <div className="h-full flex flex-col items-center justify-center gap-6 p-4 max-md:py-10">
-            <div className="img w-32 h-32 bg-background rounded-full flex items-center justify-center overflow-hidden">
-              {!user ? (
-                <Skeleton className="w-[110px] h-[110px] rounded-full " />
-              ) : (
-                <Image
-                  src={user.avatar || "/images/avatar.png"}
-                  width={130}
-                  height={130}
+            {!user ? (
+              <Skeleton className="w-32 h-32 rounded-full" />
+            ) : (
+              <Avatar className="w-32 h-32">
+                <AvatarImage
+                  src={user.avatar ?? "/images/avatar.png"}
                   alt="avatar"
                 />
-              )}
-            </div>
+                <AvatarFallback>
+                  <Image
+                    src="/images/avatar.png"
+                    alt="avatar"
+                    fill
+                    className="object-cover"
+                  />
+                </AvatarFallback>
+              </Avatar>
+            )}
             <div className="name text-2xl font-bold capitalize">
               {!user ? (
                 <Skeleton className="w-[160px] h-[30px] rounded dark:bg-background" />

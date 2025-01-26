@@ -6,12 +6,28 @@ import ProjectCard from "@/components/ProjectCard";
 import ResumeCard from "@/components/ResumeCard";
 import SkillCard from "@/components/SkillCard";
 import Square from "@/components/Square";
-import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import useStore from "@/hooks/useStore";
 import { Plus } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
@@ -91,16 +107,63 @@ export default function Dashboard() {
 
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen p-8 gap-4">
         <LoadingSpinner size="lg" />
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">Loading Dashboard</h2>
+          <p className="text-muted-foreground">
+            Please wait while we fetch your data...
+          </p>
+        </div>
       </div>
     );
   }
 
   if (status === "unauthenticated") {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>You are not authenticated</p>
+      <div className="flex flex-col items-center justify-center min-h-screen p-8">
+        <Card className="max-w-md w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Square />
+              Access Denied
+            </CardTitle>
+            <CardDescription className="ml-6">
+              Please sign in to access the dashboard
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <Link
+                href="/dashboard/signin"
+                className={buttonVariants({
+                  className: "w-full",
+                })}
+              >
+                Sign in to Dashboard
+              </Link>
+              <div className="relative text-center">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or
+                  </span>
+                </div>
+              </div>
+              <Link
+                href="/"
+                className={buttonVariants({
+                  variant: "secondary",
+                  className: "w-full",
+                })}
+              >
+                Back to Home
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -114,6 +177,17 @@ export default function Dashboard() {
         type={dialogType}
       />
       <MaxWidthContainer className={"space-y-12"}>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <div className="heading text-center flex flex-col gap-20 items-center">
           <div className="flex gap-2 items-baseline font-bold w-fit pl-4">
             <Square />
@@ -181,7 +255,7 @@ export default function Dashboard() {
                   </span>
                   Add new project
                 </Button>
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 p-4">
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 justify-items-center">
                   {projects.map((project, index) => (
                     <ProjectCard key={index} project={project} />
                   ))}
@@ -209,7 +283,7 @@ export default function Dashboard() {
                   </span>
                   Add new experience
                 </Button>
-                <div className="grid grid-cols-1 gap-6 p-4">
+                <div className="grid grid-cols-1 gap-6  justify-items-center">
                   {experiences.map((experience, index) => (
                     <ResumeCard key={index} data={experience} />
                   ))}
@@ -238,7 +312,7 @@ export default function Dashboard() {
                   </span>
                   Add new education
                 </Button>
-                <div className="grid grid-cols-1 gap-6 p-4">
+                <div className="grid grid-cols-1 gap-6  justify-items-center">
                   {education.map((education, index) => (
                     <ResumeCard key={index} data={education} />
                   ))}
@@ -265,7 +339,7 @@ export default function Dashboard() {
                   </span>
                   Add new skill
                 </Button>
-                <div className="bg-background grid grid-cols-1 xl:grid-cols-2 gap-6 p-4">
+                <div className="bg-background grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                   {skills.map((skill, index) => (
                     <SkillCard key={index} skill={skill} />
                   ))}
