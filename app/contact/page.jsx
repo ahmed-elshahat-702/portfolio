@@ -3,6 +3,14 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MaxWidthContainer from "@/components/MaxWidthContainer";
 import Square from "@/components/Square";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -111,6 +119,17 @@ const ContactPage = () => {
 
   return (
     <MaxWidthContainer className="space-y-12">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Contact</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="text-center">
         <div className="flex gap-2 items-baseline font-bold w-fit pl-4 mx-auto">
           <Square />
@@ -122,7 +141,7 @@ const ContactPage = () => {
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           ref={formRef}
-          className="bg-background shadow-sm p-12 capitalize font-bold flex flex-col gap-5"
+          className="bg-background shadow-sm p-8 capitalize font-bold flex flex-col gap-5"
         >
           <div className="flex max-md:flex-col md:items-center gap-4">
             {renderFormField("firstName", "First Name", "text", {
