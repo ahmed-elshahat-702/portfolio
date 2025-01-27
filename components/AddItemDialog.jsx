@@ -282,15 +282,27 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
         </DialogHeader>
         <div className="grid gap-4 py-4">{renderFields()}</div>
         <DialogFooter>
-          <div className="w-full flex items-center justify-between">
-            <Button variant="secondary" onClick={() => handleEmptyForm()}>
+          <div className="w-full flex max-md:flex-col-reverse items-center justify-between max-md:gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => handleEmptyForm()}
+              className="max-md:w-full"
+            >
               Empty form
             </Button>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => onClose(false)}>
+            <div className="max-md:w-full flex max-md:flex-col-reverse items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => onClose(false)}
+                className="w-full"
+              >
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} disabled={isSubmitting}>
+              <Button
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className="w-full"
+              >
                 Submit
               </Button>
             </div>

@@ -279,7 +279,7 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
           <DialogTitle>Update New {type}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">{renderFields()}</div>
-        <DialogFooter>
+        <DialogFooter className="max-md:gap-2">
           <Button variant="outline" onClick={() => onClose(false)}>
             Cancel
           </Button>
