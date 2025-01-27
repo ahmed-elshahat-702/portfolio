@@ -55,7 +55,9 @@ const useStore = create((set) => ({
   addProject: async (project) => {
     set({ isLoading: true });
     try {
-      const response = await axios.post("/api/projects", project);
+      const response = await axios.post("/api/projects", project, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       set((state) => ({ projects: [...state.projects, response.data] }));
     } catch (error) {
       throw new Error(error);

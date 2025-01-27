@@ -30,35 +30,3 @@ export async function POST(request) {
     });
   }
 }
-
-export async function PUT(request) {
-  await connectToDatabase();
-
-  try {
-    const { id, ...updateData } = await request.json();
-    const updatedSkill = await Skill.findByIdAndUpdate(id, updateData, {
-      new: true,
-    });
-    return NextResponse.json(updatedSkill);
-  } catch (error) {
-    return NextResponse.json({
-      message: "Error updating skill",
-      error: error.message,
-    });
-  }
-}
-
-export async function DELETE(request) {
-  await connectToDatabase();
-
-  try {
-    const { id } = await request.json();
-    await Skill.findByIdAndDelete(id);
-    return NextResponse.json({ message: "Skill deleted successfully" });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Error deleting skill",
-      error: error.message,
-    });
-  }
-}

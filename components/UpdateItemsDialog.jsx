@@ -2,7 +2,7 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { Button } from "./ui/button";
 import {
@@ -44,10 +44,10 @@ const formSchemas = {
   }),
 };
 
-const AddItemDialog = ({ open, onClose, onSave, type }) => {
-  const [formData, setFormData] = useState({});
+const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
+  const [formData, setFormData] = useState(initialData || {});
+  const [imageUrl, setImageUrl] = useState(initialData?.image || "");
   const [errors, setErrors] = useState({});
-  const [imageUrl, setImageUrl] = useState(null);
   const [actualFile, setActualFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,6 +55,11 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
   const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif"];
+
+  useEffect(() => {
+    setFormData(initialData || {});
+    setImageUrl(initialData?.image || "");
+  }, [initialData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -105,8 +110,8 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
   };
 
   const handleEmptyForm = () => {
-    setFormData({});
-    setImageUrl("");
+    setFormData(initialData || {});
+    setImageUrl(initialData?.image || "");
     setActualFile(null);
     setErrors({});
   };
@@ -164,15 +169,15 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
         ...(uploadedImageUrl && { image: uploadedImageUrl }),
       };
 
-      await onSave(finalData);
+      await onUpdate(initialData._id, finalData);
 
       toast({
         title: "Success",
-        description: `${type} added successfully`,
+        description: `${type} updated successfully`,
       });
 
-      setFormData({});
-      setImageUrl("");
+      setFormData(initialData || {});
+      setImageUrl(initialData?.image || "");
       setActualFile(null);
       setErrors({});
       onClose();
@@ -278,7 +283,7 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New {type}</DialogTitle>
+          <DialogTitle>Update New {type}</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">{renderFields()}</div>
         <DialogFooter>
@@ -291,7 +296,7 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
                 Cancel
               </Button>
               <Button onClick={handleSubmit} disabled={isSubmitting}>
-                Submit
+                {isSubmitting ? "Updating..." : "Update"}
               </Button>
             </div>
           </div>
@@ -301,4 +306,4 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
   );
 };
 
-export default AddItemDialog;
+export default UpdateItemDialog;

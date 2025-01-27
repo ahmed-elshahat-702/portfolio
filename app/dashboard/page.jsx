@@ -1,5 +1,6 @@
 "use client";
 import AddItemDialog from "@/components/AddItemDialog";
+import DeleteItemDialog from "@/components/DeleteItemDialog";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MaxWidthContainer from "@/components/MaxWidthContainer";
 import ProjectCard from "@/components/ProjectCard";
@@ -23,6 +24,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UpdateItemDialog from "@/components/UpdateItemsDialog";
 import { useToast } from "@/hooks/use-toast";
 import useStore from "@/hooks/useStore";
 import { Plus } from "lucide-react";
@@ -44,42 +46,158 @@ export default function Dashboard() {
     fetchExperiences,
     fetchEducation,
     fetchSkills,
-    addProjects,
-    addExperiences,
+    addProject,
+    addExperience,
     addEducation,
-    addSkills,
+    addSkill,
+    deleteProject,
+    deleteExperience,
+    deleteEducation,
+    deleteSkill,
+    updateProject,
+    updateExperience,
+    updateEducation,
+    updateSkill,
   } = useStore();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogType, setDialogType] = useState("");
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [addDialogType, setAddDialogType] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogType, setDeleteDialogType] = useState("");
+  const [deleteDialogId, setDeleteDialogId] = useState("");
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [updateDialogType, setUpdateDialogType] = useState("");
+  const [updateDialogId, setUpdateDialogId] = useState("");
+  const [initialData, setInitialData] = useState("");
 
   const handleAddClick = (type) => {
-    setDialogType(type);
-    setDialogOpen(true);
+    setAddDialogType(type);
+    setAddDialogOpen(true);
   };
 
-  const handleDialogClose = () => {
-    setDialogOpen(false);
+  const handleDeleteClick = ({ type, id }) => {
+    setDeleteDialogType(type);
+    setDeleteDialogId(id);
+    setDeleteDialogOpen(true);
   };
 
-  const handleDialogSave = (data) => {
-    switch (dialogType) {
-      case "Project":
-        addProjects(data);
-        break;
-      case "Experience":
-        addExperiences(data);
-        break;
-      case "Education":
-        addEducation(data);
-        break;
-      case "Skill":
-        addSkills(data);
-        break;
-      default:
-        break;
+  const handleUpdateClick = ({ type, id, initialData }) => {
+    setInitialData(initialData);
+    setUpdateDialogType(type);
+    setUpdateDialogId(id);
+    setUpdateDialogOpen(true);
+  };
+
+  const handleAddDialogClose = () => {
+    setAddDialogOpen(false);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleUpdateDialogClose = () => {
+    setInitialData("");
+    setUpdateDialogOpen(false);
+  };
+
+  const handleDialogAdd = async (data) => {
+    try {
+      switch (addDialogType) {
+        case "Project":
+          await addProject(data);
+          await fetchProjects();
+          break;
+        case "Experience":
+          await addExperience(data);
+          await fetchExperiences();
+          break;
+        case "Education":
+          await addEducation(data);
+          await fetchEducation();
+          break;
+        case "Skill":
+          await addSkill(data);
+          await fetchSkills();
+          break;
+        default:
+          break;
+      }
+
+      setAddDialogOpen(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save data",
+      });
     }
-    setDialogOpen(false);
+  };
+
+  const handleDialogDelete = async (id) => {
+    try {
+      switch (deleteDialogType) {
+        case "Project":
+          await deleteProject(id);
+          await fetchProjects();
+          break;
+        case "Experience":
+          await deleteExperience(id);
+          await fetchExperiences();
+          break;
+        case "Education":
+          await deleteEducation(id);
+          await fetchEducation();
+          break;
+        case "Skill":
+          await deleteSkill(id);
+          await fetchSkills();
+          break;
+        default:
+          break;
+      }
+
+      setDeleteDialogOpen(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save data",
+      });
+    }
+  };
+
+  const handleDialogUpdate = async (id, data) => {
+    try {
+      switch (updateDialogType) {
+        case "Project":
+          await updateProject(id, data);
+          await fetchProjects();
+          break;
+        case "Experience":
+          await updateExperience(id, data);
+          await fetchExperiences();
+          break;
+        case "Education":
+          await updateEducation(id, data);
+          await fetchEducation();
+          break;
+        case "Skill":
+          await updateSkill(id, data);
+          await fetchSkills();
+          break;
+        default:
+          break;
+      }
+
+      setUpdateDialogOpen(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save data",
+      });
+    }
   };
 
   useEffect(() => {
@@ -95,15 +213,14 @@ export default function Dashboard() {
         } catch (error) {
           toast({
             variant: "destructive",
-            title: "Failed",
-            message: "Failed to fetch data",
+            title: "Error",
+            description: "Failed to fetch data",
           });
         }
       };
-
       fetchAllData();
     }
-  }, [status]);
+  }, [status, fetchProjects, fetchExperiences, fetchEducation, fetchSkills]);
 
   if (status === "loading") {
     return (
@@ -171,10 +288,25 @@ export default function Dashboard() {
   return (
     <div>
       <AddItemDialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        onSave={handleDialogSave}
-        type={dialogType}
+        open={addDialogOpen}
+        onClose={handleAddDialogClose}
+        onSave={handleDialogAdd}
+        type={addDialogType}
+      />
+      <DeleteItemDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteDialogClose}
+        onDelete={handleDialogDelete}
+        type={deleteDialogType}
+        id={deleteDialogId}
+      />
+      <UpdateItemDialog
+        open={updateDialogOpen}
+        onClose={handleUpdateDialogClose}
+        onUpdate={handleDialogUpdate}
+        type={updateDialogType}
+        id={updateDialogId}
+        initialData={initialData}
       />
       <MaxWidthContainer className={"space-y-12"}>
         <Breadcrumb>
@@ -257,7 +389,24 @@ export default function Dashboard() {
                 </Button>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 justify-items-center">
                   {projects.map((project, index) => (
-                    <ProjectCard key={index} project={project} />
+                    <ProjectCard
+                      key={index}
+                      project={project}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Project",
+                          id: id,
+                        });
+                      }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Project",
+                          id: id,
+                          initialData: initialData,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -285,7 +434,24 @@ export default function Dashboard() {
                 </Button>
                 <div className="grid grid-cols-1 gap-6  justify-items-center">
                   {experiences.map((experience, index) => (
-                    <ResumeCard key={index} data={experience} />
+                    <ResumeCard
+                      key={index}
+                      data={experience}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Experience",
+                          id: id,
+                        });
+                      }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Experience",
+                          id: id,
+                          initialData: initialData,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -314,7 +480,24 @@ export default function Dashboard() {
                 </Button>
                 <div className="grid grid-cols-1 gap-6  justify-items-center">
                   {education.map((education, index) => (
-                    <ResumeCard key={index} data={education} />
+                    <ResumeCard
+                      key={index}
+                      data={education}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Education",
+                          id: id,
+                        });
+                      }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Education",
+                          id: id,
+                          initialData: initialData,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -341,7 +524,24 @@ export default function Dashboard() {
                 </Button>
                 <div className="bg-background grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                   {skills.map((skill, index) => (
-                    <SkillCard key={index} skill={skill} />
+                    <SkillCard
+                      key={index}
+                      skill={skill}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Skill",
+                          id: id,
+                        });
+                      }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Skill",
+                          id: id,
+                          initialData: initialData,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
