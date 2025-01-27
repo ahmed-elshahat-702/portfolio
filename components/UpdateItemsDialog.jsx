@@ -109,13 +109,6 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
     }));
   };
 
-  const handleEmptyForm = () => {
-    setFormData(initialData || {});
-    setImageUrl(initialData?.image || "");
-    setActualFile(null);
-    setErrors({});
-  };
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -287,19 +280,12 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
         </DialogHeader>
         <div className="grid gap-4 py-4">{renderFields()}</div>
         <DialogFooter>
-          <div className="w-full flex items-center justify-between">
-            <Button variant="secondary" onClick={() => handleEmptyForm()}>
-              Empty form
-            </Button>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => onClose(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleSubmit} disabled={isSubmitting}>
-                {isSubmitting ? "Updating..." : "Update"}
-              </Button>
-            </div>
-          </div>
+          <Button variant="outline" onClick={() => onClose(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? "Updating..." : "Update"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
