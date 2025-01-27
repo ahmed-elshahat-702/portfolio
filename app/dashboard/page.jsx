@@ -1,5 +1,6 @@
 "use client";
 import AddItemDialog from "@/components/AddItemDialog";
+import DeleteItemDialog from "@/components/DeleteItemDialog";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MaxWidthContainer from "@/components/MaxWidthContainer";
 import ProjectCard from "@/components/ProjectCard";
@@ -48,23 +49,40 @@ export default function Dashboard() {
     addExperience,
     addEducation,
     addSkill,
+    deleteProject,
+    deleteExperience,
+    deleteEducation,
+    deleteSkill,
   } = useStore();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogType, setDialogType] = useState("");
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [addDialogType, setAddDialogType] = useState("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteDialogType, setDeleteDialogType] = useState("");
+  const [deleteDialogId, setDeleteDialogId] = useState("");
 
   const handleAddClick = (type) => {
-    setDialogType(type);
-    setDialogOpen(true);
+    setAddDialogType(type);
+    setAddDialogOpen(true);
   };
 
-  const handleDialogClose = () => {
-    setDialogOpen(false);
+  const handleDeleteClick = ({ type, id }) => {
+    setDeleteDialogType(type);
+    setDeleteDialogId(id);
+    setDeleteDialogOpen(true);
   };
 
-  const handleDialogSave = async (data) => {
+  const handleAddDialogClose = () => {
+    setAddDialogOpen(false);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDialogAdd = async (data) => {
     try {
-      switch (dialogType) {
+      switch (addDialogType) {
         case "Project":
           await addProject(data);
           await fetchProjects();
@@ -85,9 +103,41 @@ export default function Dashboard() {
           break;
       }
 
-      setDialogOpen(false);
+      setAddDialogOpen(false);
     } catch (error) {
-      console.error("Save error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save data",
+      });
+    }
+  };
+
+  const handleDialogDelete = async (id) => {
+    try {
+      switch (deleteDialogType) {
+        case "Project":
+          await deleteProject(id);
+          await fetchProjects();
+          break;
+        case "Experience":
+          await deleteExperience(id);
+          await fetchExperiences();
+          break;
+        case "Education":
+          await deleteEducation(id);
+          await fetchEducation();
+          break;
+        case "Skill":
+          await deleteSkill(id);
+          await fetchSkills();
+          break;
+        default:
+          break;
+      }
+
+      setDeleteDialogOpen(false);
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -184,10 +234,17 @@ export default function Dashboard() {
   return (
     <div>
       <AddItemDialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        onSave={handleDialogSave}
-        type={dialogType}
+        open={addDialogOpen}
+        onClose={handleAddDialogClose}
+        onSave={handleDialogAdd}
+        type={addDialogType}
+      />
+      <DeleteItemDialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteDialogClose}
+        onDelete={handleDialogDelete}
+        type={deleteDialogType}
+        id={deleteDialogId}
       />
       <MaxWidthContainer className={"space-y-12"}>
         <Breadcrumb>
@@ -259,7 +316,7 @@ export default function Dashboard() {
             {projects && (
               <div className="w-full h-full">
                 <Button
-                  variant="gh</TabsContent>ost"
+                  variant="ghost"
                   className="w-full my-4 border-2 border-dashed border-main"
                   onClick={() => handleAddClick("Project")}
                 >
@@ -270,7 +327,17 @@ export default function Dashboard() {
                 </Button>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 justify-items-center">
                   {projects.map((project, index) => (
-                    <ProjectCard key={index} project={project} />
+                    <ProjectCard
+                      key={index}
+                      project={project}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Project",
+                          id: id,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -298,7 +365,17 @@ export default function Dashboard() {
                 </Button>
                 <div className="grid grid-cols-1 gap-6  justify-items-center">
                   {experiences.map((experience, index) => (
-                    <ResumeCard key={index} data={experience} />
+                    <ResumeCard
+                      key={index}
+                      data={experience}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Experience",
+                          id: id,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -327,7 +404,17 @@ export default function Dashboard() {
                 </Button>
                 <div className="grid grid-cols-1 gap-6  justify-items-center">
                   {education.map((education, index) => (
-                    <ResumeCard key={index} data={education} />
+                    <ResumeCard
+                      key={index}
+                      data={education}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Education",
+                          id: id,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>
@@ -354,7 +441,17 @@ export default function Dashboard() {
                 </Button>
                 <div className="bg-background grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
                   {skills.map((skill, index) => (
-                    <SkillCard key={index} skill={skill} />
+                    <SkillCard
+                      key={index}
+                      skill={skill}
+                      isAdmin={true}
+                      handleDeleteClick={(id) => {
+                        handleDeleteClick({
+                          type: "Skill",
+                          id: id,
+                        });
+                      }}
+                    />
                   ))}
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
+import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { z } from "zod";
@@ -19,8 +20,8 @@ const formSchemas = {
   Project: z.object({
     name: z.string().min(1, "Name is required"),
     description: z.string().min(1, "Description is required"),
-    link: z.string().url("Invalid URL").optional(),
-    image: z.string().url("Invalid URL").optional(),
+    link: z.string().url("Invalid URL"),
+    image: z.string().url("Invalid URL"),
   }),
   Experience: z.object({
     skill: z.string().min(1, "Skill is required"),
@@ -44,12 +45,7 @@ const formSchemas = {
 };
 
 const AddItemDialog = ({ open, onClose, onSave, type }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    link: "",
-    image: "",
-  });
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [imageUrl, setImageUrl] = useState(null);
   const [actualFile, setActualFile] = useState(null);
@@ -100,22 +96,41 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
     }
   };
 
+  const handleRemoveImage = () => {
+    setImageUrl("");
+    setFormData((prev) => ({
+      ...prev,
+      image: "",
+    }));
+  };
+
+  const handleEmptyForm = () => {
+    setFormData({});
+    setImageUrl("");
+    setActualFile(null);
+    setErrors({});
+  };
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
     try {
+      // Validate data first
+      const validatedData = formSchemas[type].parse(formData);
+
       let uploadedImageUrl = "";
 
-      if (actualFile) {
+      // Only proceed with image upload if we have an actual file and it's a Project type
+      if (actualFile && type === "Project") {
+        const uploadFormData = new FormData();
+        uploadFormData.append("file", actualFile);
+
+        toast({
+          title: "Uploading image",
+          description: "Please wait while we upload your image.",
+        });
+
         try {
-          const uploadFormData = new FormData();
-          uploadFormData.append("file", actualFile);
-
-          toast({
-            title: "Uploading image",
-            description: "Please wait while we upload your image.",
-          });
-
           const response = await axios.post("/api/upload", uploadFormData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
@@ -136,26 +151,26 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
           toast({
             variant: "destructive",
             title: "Error",
-            description: "Failed to upload image.",
+            description:
+              "Failed to upload image, check you internet connection and try again",
           });
-          console.error(error);
           return;
         }
       }
 
-      const validatedData = formSchemas[type].parse({
-        ...formData,
-        image: uploadedImageUrl || formData.image,
-      });
+      // Create final data object with the uploaded image URL if available
+      const finalData = {
+        ...validatedData,
+        ...(uploadedImageUrl && { image: uploadedImageUrl }),
+      };
 
-      await onSave(validatedData);
+      await onSave(finalData);
 
       toast({
         title: "Success",
         description: `${type} added successfully`,
       });
 
-      // Reset form
       setFormData({});
       setImageUrl("");
       setActualFile(null);
@@ -205,6 +220,12 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
                     fill
                     className="object-cover"
                   />
+                  <button
+                    onClick={handleRemoveImage}
+                    className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
+                  >
+                    <X />
+                  </button>
                 </div>
               )}
             </div>
@@ -261,12 +282,19 @@ const AddItemDialog = ({ open, onClose, onSave, type }) => {
         </DialogHeader>
         <div className="grid gap-4 py-4">{renderFields()}</div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onClose(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            Submit
-          </Button>
+          <div className="w-full flex items-center justify-between">
+            <Button variant="secondary" onClick={() => handleEmptyForm()}>
+              Empty form
+            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={() => onClose(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit} disabled={isSubmitting}>
+                Submit
+              </Button>
+            </div>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

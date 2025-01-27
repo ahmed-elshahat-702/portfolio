@@ -30,39 +30,3 @@ export async function POST(request) {
     });
   }
 }
-
-export async function PUT(request) {
-  await connectToDatabase();
-
-  try {
-    const { id, ...updateData } = await request.json();
-    const updatedExperience = await Experience.findByIdAndUpdate(
-      id,
-      updateData,
-      {
-        new: true,
-      }
-    );
-    return NextResponse.json(updatedExperience);
-  } catch (error) {
-    return NextResponse.json({
-      message: "Error updating experience",
-      error: error.message,
-    });
-  }
-}
-
-export async function DELETE(request) {
-  await connectToDatabase();
-
-  try {
-    const { id } = await request.json();
-    await Experience.findByIdAndDelete(id);
-    return NextResponse.json({ message: "Experience deleted successfully" });
-  } catch (error) {
-    return NextResponse.json({
-      message: "Error deleting experience",
-      error: error.message,
-    });
-  }
-}

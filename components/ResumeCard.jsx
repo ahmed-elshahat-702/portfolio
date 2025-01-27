@@ -1,8 +1,10 @@
+import { Trash2 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
+import { Button } from "./ui/button";
 
-const ResumeCard = ({ data }) => {
+const ResumeCard = ({ data, isAdmin, handleDeleteClick }) => {
   return (
-    <div className="bg-background shadow-sm h-fit w-full md:flex max-sm:p-4 p-8">
+    <div className="bg-background shadow-sm h-fit w-full md:flex max-sm:p-4 p-8 relative">
       <div className="md:flex-1 space-y-1">
         <h1 className="text-lg font-bold text-main">
           {!data ? (
@@ -44,6 +46,15 @@ const ResumeCard = ({ data }) => {
           data.description
         )}
       </div>
+      {isAdmin ? (
+        <Button
+          variant="ghost"
+          className="p-2 h-fit absolute right-2 top-2"
+          onClick={() => handleDeleteClick(data._id)}
+        >
+          <Trash2 className="w-4 h-4 text-destructive" />
+        </Button>
+      ) : null}
     </div>
   );
 };
