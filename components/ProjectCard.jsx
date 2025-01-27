@@ -1,10 +1,15 @@
-import { ExternalLink, LinkIcon, Trash2 } from "lucide-react";
+import { Edit2, ExternalLink, LinkIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 
-const ProjectCard = ({ project, isAdmin, handleDeleteClick }) => {
+const ProjectCard = ({
+  project,
+  isAdmin,
+  handleDeleteClick,
+  handleUpdateClick,
+}) => {
   return (
     <div className="bg-background shadow-sm w-full max-w-[600px] h-full flex flex-col justify-between relative">
       <div className="py-4">
@@ -63,13 +68,22 @@ const ProjectCard = ({ project, isAdmin, handleDeleteClick }) => {
         />
       )}
       {isAdmin ? (
-        <Button
-          variant="ghost"
-          className="p-2 h-fit absolute right-2 top-2"
-          onClick={() => handleDeleteClick(project._id)}
-        >
-          <Trash2 className="w-4 h-4 text-destructive" />
-        </Button>
+        <div className="absolute right-2 top-2 flex items-center gap-1">
+          <Button
+            variant="ghost"
+            className="p-2 h-fit"
+            onClick={() => handleUpdateClick(project._id, project)}
+          >
+            <Edit2 className="w-4 h-4 text-main" />
+          </Button>
+          <Button
+            variant="ghost"
+            className="p-2 h-fit"
+            onClick={() => handleDeleteClick(project._id)}
+          >
+            <Trash2 className="w-4 h-4 text-destructive" />
+          </Button>
+        </div>
       ) : null}
     </div>
   );

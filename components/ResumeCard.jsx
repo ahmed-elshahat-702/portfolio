@@ -1,8 +1,13 @@
-import { Trash2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 
-const ResumeCard = ({ data, isAdmin, handleDeleteClick }) => {
+const ResumeCard = ({
+  data,
+  isAdmin,
+  handleDeleteClick,
+  handleUpdateClick,
+}) => {
   return (
     <div className="bg-background shadow-sm h-fit w-full md:flex max-sm:p-4 p-8 relative">
       <div className="md:flex-1 space-y-1">
@@ -47,13 +52,22 @@ const ResumeCard = ({ data, isAdmin, handleDeleteClick }) => {
         )}
       </div>
       {isAdmin ? (
-        <Button
-          variant="ghost"
-          className="p-2 h-fit absolute right-2 top-2"
-          onClick={() => handleDeleteClick(data._id)}
-        >
-          <Trash2 className="w-4 h-4 text-destructive" />
-        </Button>
+        <div className="absolute right-2 top-2 flex items-center gap-1">
+          <Button
+            variant="ghost"
+            className="p-2 h-fit"
+            onClick={() => handleUpdateClick(data._id, data)}
+          >
+            <Edit2 className="w-4 h-4 text-main" />
+          </Button>
+          <Button
+            variant="ghost"
+            className="p-2 h-fit"
+            onClick={() => handleDeleteClick(data._id)}
+          >
+            <Trash2 className="w-4 h-4 text-destructive" />
+          </Button>
+        </div>
       ) : null}
     </div>
   );

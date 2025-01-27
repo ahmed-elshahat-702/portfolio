@@ -2,22 +2,28 @@ import { connectToDatabase } from "@/lib/db";
 import Experience from "@/lib/models/Experience";
 import { NextResponse } from "next/server";
 
-// export async function PUT(request) {
-//   await connectToDatabase();
+export async function PUT(request, { params }) {
+  await connectToDatabase();
 
-//   try {
-//     const { id, ...updateData } = await request.json();
-//     const updatedExperience = await Experience.findByIdAndUpdate(id, updateData, {
-//       new: true,
-//     });
-//     return NextResponse.json(updatedExperience);
-//   } catch (error) {
-//     return NextResponse.json({
-//       message: "Error updating Experience",
-//       error: error.message,
-//     });
-//   }
-// }
+  try {
+    const { experienceId } = params;
+
+    const { ...updateData } = await request.json();
+    const updatedExperience = await Experience.findByIdAndUpdate(
+      experienceId,
+      updateData,
+      {
+        new: true,
+      }
+    );
+    return NextResponse.json(updatedExperience);
+  } catch (error) {
+    return NextResponse.json({
+      message: "Error updating experience",
+      error: error.message,
+    });
+  }
+}
 
 export async function DELETE(request, { params }) {
   await connectToDatabase();

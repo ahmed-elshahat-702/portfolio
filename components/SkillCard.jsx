@@ -1,9 +1,14 @@
-import { Trash2 } from "lucide-react";
+import { Edit2, Trash2 } from "lucide-react";
 import Square from "./Square";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
-const SkillCard = ({ skill, isAdmin, handleDeleteClick }) => {
+const SkillCard = ({
+  skill,
+  isAdmin,
+  handleDeleteClick,
+  handleUpdateClick,
+}) => {
   return skill ? (
     <>
       <div className="border p-1 font-semibold w-full flex items-center justify-between">
@@ -12,13 +17,22 @@ const SkillCard = ({ skill, isAdmin, handleDeleteClick }) => {
           <h1>{skill.name}</h1>
         </div>
         {isAdmin ? (
-          <Button
-            variant="ghost"
-            className="p-2 h-fit"
-            onClick={() => handleDeleteClick(skill._id)}
-          >
-            <Trash2 className="w-4 h-4 text-destructive" />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              className="p-2 h-fit"
+              onClick={() => handleUpdateClick(skill._id, skill)}
+            >
+              <Edit2 className="w-4 h-4 text-main" />
+            </Button>
+            <Button
+              variant="ghost"
+              className="p-2 h-fit"
+              onClick={() => handleDeleteClick(skill._id)}
+            >
+              <Trash2 className="w-4 h-4 text-destructive" />
+            </Button>
+          </div>
         ) : null}
       </div>
     </>

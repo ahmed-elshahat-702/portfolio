@@ -24,6 +24,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UpdateItemDialog from "@/components/UpdateItemsDialog";
 import { useToast } from "@/hooks/use-toast";
 import useStore from "@/hooks/useStore";
 import { Plus } from "lucide-react";
@@ -53,6 +54,10 @@ export default function Dashboard() {
     deleteExperience,
     deleteEducation,
     deleteSkill,
+    updateProject,
+    updateExperience,
+    updateEducation,
+    updateSkill,
   } = useStore();
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -60,6 +65,10 @@ export default function Dashboard() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteDialogType, setDeleteDialogType] = useState("");
   const [deleteDialogId, setDeleteDialogId] = useState("");
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [updateDialogType, setUpdateDialogType] = useState("");
+  const [updateDialogId, setUpdateDialogId] = useState("");
+  const [initialData, setInitialData] = useState("");
 
   const handleAddClick = (type) => {
     setAddDialogType(type);
@@ -72,12 +81,24 @@ export default function Dashboard() {
     setDeleteDialogOpen(true);
   };
 
+  const handleUpdateClick = ({ type, id, initialData }) => {
+    setInitialData(initialData);
+    setUpdateDialogType(type);
+    setUpdateDialogId(id);
+    setUpdateDialogOpen(true);
+  };
+
   const handleAddDialogClose = () => {
     setAddDialogOpen(false);
   };
 
   const handleDeleteDialogClose = () => {
     setDeleteDialogOpen(false);
+  };
+
+  const handleUpdateDialogClose = () => {
+    setInitialData("");
+    setUpdateDialogOpen(false);
   };
 
   const handleDialogAdd = async (data) => {
@@ -137,6 +158,39 @@ export default function Dashboard() {
       }
 
       setDeleteDialogOpen(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to save data",
+      });
+    }
+  };
+
+  const handleDialogUpdate = async (id, data) => {
+    try {
+      switch (updateDialogType) {
+        case "Project":
+          await updateProject(id, data);
+          await fetchProjects();
+          break;
+        case "Experience":
+          await updateExperience(id, data);
+          await fetchExperiences();
+          break;
+        case "Education":
+          await updateEducation(id, data);
+          await fetchEducation();
+          break;
+        case "Skill":
+          await updateSkill(id, data);
+          await fetchSkills();
+          break;
+        default:
+          break;
+      }
+
+      setUpdateDialogOpen(false);
     } catch (error) {
       toast({
         variant: "destructive",
@@ -246,6 +300,14 @@ export default function Dashboard() {
         type={deleteDialogType}
         id={deleteDialogId}
       />
+      <UpdateItemDialog
+        open={updateDialogOpen}
+        onClose={handleUpdateDialogClose}
+        onUpdate={handleDialogUpdate}
+        type={updateDialogType}
+        id={updateDialogId}
+        initialData={initialData}
+      />
       <MaxWidthContainer className={"space-y-12"}>
         <Breadcrumb>
           <BreadcrumbList>
@@ -337,6 +399,13 @@ export default function Dashboard() {
                           id: id,
                         });
                       }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Project",
+                          id: id,
+                          initialData: initialData,
+                        });
+                      }}
                     />
                   ))}
                 </div>
@@ -373,6 +442,13 @@ export default function Dashboard() {
                         handleDeleteClick({
                           type: "Experience",
                           id: id,
+                        });
+                      }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Experience",
+                          id: id,
+                          initialData: initialData,
                         });
                       }}
                     />
@@ -414,6 +490,13 @@ export default function Dashboard() {
                           id: id,
                         });
                       }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Education",
+                          id: id,
+                          initialData: initialData,
+                        });
+                      }}
                     />
                   ))}
                 </div>
@@ -449,6 +532,13 @@ export default function Dashboard() {
                         handleDeleteClick({
                           type: "Skill",
                           id: id,
+                        });
+                      }}
+                      handleUpdateClick={(id, initialData) => {
+                        handleUpdateClick({
+                          type: "Skill",
+                          id: id,
+                          initialData: initialData,
                         });
                       }}
                     />

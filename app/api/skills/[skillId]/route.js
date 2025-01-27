@@ -2,22 +2,24 @@ import { connectToDatabase } from "@/lib/db";
 import Skill from "@/lib/models/Skill";
 import { NextResponse } from "next/server";
 
-// export async function PUT(request) {
-//   await connectToDatabase();
+export async function PUT(request, { params }) {
+  await connectToDatabase();
 
-//   try {
-//     const { id, ...updateData } = await request.json();
-//     const updatedSkill = await Skill.findByIdAndUpdate(id, updateData, {
-//       new: true,
-//     });
-//     return NextResponse.json(updatedSkill);
-//   } catch (error) {
-//     return NextResponse.json({
-//       message: "Error updating skill",
-//       error: error.message,
-//     });
-//   }
-// }
+  try {
+    const { skillId } = params;
+
+    const { ...updateData } = await request.json();
+    const updatedSkill = await Skill.findByIdAndUpdate(skillId, updateData, {
+      new: true,
+    });
+    return NextResponse.json(updatedSkill);
+  } catch (error) {
+    return NextResponse.json({
+      message: "Error updating skill",
+      error: error.message,
+    });
+  }
+}
 
 export async function DELETE(request, { params }) {
   await connectToDatabase();

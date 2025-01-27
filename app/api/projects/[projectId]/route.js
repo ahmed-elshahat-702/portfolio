@@ -2,22 +2,28 @@ import { connectToDatabase } from "@/lib/db";
 import Project from "@/lib/models/Project";
 import { NextResponse } from "next/server";
 
-// export async function PUT(request) {
-//   await connectToDatabase();
+export async function PUT(request, { params }) {
+  await connectToDatabase();
 
-//   try {
-//     const { id, ...updateData } = await request.json();
-//     const updatedProject = await Project.findByIdAndUpdate(id, updateData, {
-//       new: true,
-//     });
-//     return NextResponse.json(updatedProject);
-//   } catch (error) {
-//     return NextResponse.json({
-//       message: "Error updating project",
-//       error: error.message,
-//     });
-//   }
-// }
+  try {
+    const { projectId } = params;
+
+    const { ...updateData } = await request.json();
+    const updatedProject = await Project.findByIdAndUpdate(
+      projectId,
+      updateData,
+      {
+        new: true,
+      }
+    );
+    return NextResponse.json(updatedProject);
+  } catch (error) {
+    return NextResponse.json({
+      message: "Error updating project",
+      error: error.message,
+    });
+  }
+}
 
 export async function DELETE(request, { params }) {
   await connectToDatabase();
