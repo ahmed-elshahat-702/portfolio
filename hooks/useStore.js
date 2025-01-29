@@ -1,54 +1,55 @@
-import { create } from "zustand";
 import axios from "axios";
+import { create } from "zustand";
 
 const useStore = create((set) => ({
+  isFetching: true,
   isLoading: false,
   projects: null,
   experiences: null,
   education: null,
   skills: null,
+
   fetchProjects: async () => {
-    set({ isLoading: true });
     try {
       const response = await axios.get("/api/projects");
       set({ projects: response.data });
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isLoading: false });
+      set({ isFetching: false });
     }
   },
+
   fetchExperiences: async () => {
-    set({ isLoading: true });
     try {
       const response = await axios.get("/api/experiences");
       set({ experiences: response.data });
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isLoading: false });
+      set({ isFetching: false });
     }
   },
+
   fetchEducation: async () => {
-    set({ isLoading: true });
     try {
       const response = await axios.get("/api/education");
       set({ education: response.data });
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isLoading: false });
+      set({ isFetching: false });
     }
   },
+
   fetchSkills: async () => {
-    set({ isLoading: true });
     try {
       const response = await axios.get("/api/skills");
       set({ skills: response.data });
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isLoading: false });
+      set({ isFetching: false });
     }
   },
 

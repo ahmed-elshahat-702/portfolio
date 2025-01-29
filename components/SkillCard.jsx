@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Edit2, Trash2 } from "lucide-react";
 import Square from "./Square";
 import { Button } from "./ui/button";
@@ -11,7 +12,12 @@ const SkillCard = ({
 }) => {
   return skill ? (
     <>
-      <div className="border p-1 font-semibold w-full flex items-center justify-between">
+      <div
+        className={cn(
+          "font-semibold w-full flex items-center justify-between",
+          isAdmin ? "border p-1" : null
+        )}
+      >
         <div className="pl-4 flex items-center gap-2">
           <Square />
           <h1>{skill.name}</h1>
