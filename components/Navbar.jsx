@@ -123,6 +123,7 @@ const Navbar = () => {
             <React.Fragment key={index}>
               <Link
                 href={link.link}
+                onClick={() => setIsCollapsed(true)}
                 className={cn(
                   "text-lg transition border-dashed hover:border-b-2 hover:border-main",
                   active === link.link

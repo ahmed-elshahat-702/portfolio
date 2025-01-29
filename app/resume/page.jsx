@@ -18,7 +18,9 @@ import { useEffect } from "react";
 
 const page = () => {
   const {
-    isFetching,
+    isFetchingExperiences,
+    isFetchingEducation,
+    isFetchingSkills,
     experiences,
     fetchExperiences,
     education,
@@ -67,15 +69,15 @@ const page = () => {
           <span className="text-main">"</span>
         </h1>
         <div className="flex flex-col gap-2">
-          {isFetching && !experiences && <ResumeCard />}
+          {isFetchingExperiences && !experiences && <ResumeCard />}
 
-          {!isFetching &&
+          {!isFetchingExperiences &&
             experiences &&
             experiences.map((experience, index) => (
               <ResumeCard key={index} data={experience} />
             ))}
 
-          {!isFetching && !experiences && (
+          {!isFetchingExperiences && !experiences && (
             <div className="flex items-center justify-center">
               <p>there is no experiences</p>
             </div>
@@ -89,15 +91,15 @@ const page = () => {
           <span className="text-main">"</span>
         </h1>
         <div className="flex flex-col gap-2">
-          {isFetching && !education && <ResumeCard />}
+          {isFetchingEducation && !education && <ResumeCard />}
 
-          {!isFetching &&
+          {!isFetchingEducation &&
             education &&
             education.map((education, index) => (
               <ResumeCard key={index} data={education} />
             ))}
 
-          {!isFetching && !education && (
+          {!isFetchingEducation && !education && (
             <div className="flex items-center justify-center">
               <p>there is no education</p>
             </div>
@@ -111,15 +113,15 @@ const page = () => {
           <span className="text-main">"</span>
         </h1>
         <div className="bg-background shadow-sm h-fit w-full p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {isFetching && !skills && <SkillCard />}
+          {isFetchingSkills && !skills && <SkillCard />}
 
-          {!isFetching &&
+          {!isFetchingSkills &&
             skills &&
             skills.map((skill, index) => (
               <SkillCard key={index} skill={skill} />
             ))}
 
-          {!isFetching && !skills && (
+          {!isFetchingSkills && !skills && (
             <div className="flex items-center justify-center">
               <p>there is no skills</p>
             </div>

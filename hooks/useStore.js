@@ -2,7 +2,10 @@ import axios from "axios";
 import { create } from "zustand";
 
 const useStore = create((set) => ({
-  isFetching: true,
+  isFetchingProjects: true,
+  isFetchingExperiences: true,
+  isFetchingEducation: true,
+  isFetchingSkills: true,
   isLoading: false,
   projects: null,
   experiences: null,
@@ -16,7 +19,7 @@ const useStore = create((set) => ({
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isFetching: false });
+      set({ isFetchingProjects: false });
     }
   },
 
@@ -27,7 +30,7 @@ const useStore = create((set) => ({
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isFetching: false });
+      set({ isFetchingExperiences: false });
     }
   },
 
@@ -38,7 +41,7 @@ const useStore = create((set) => ({
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isFetching: false });
+      set({ isFetchingEducation: false });
     }
   },
 
@@ -49,7 +52,7 @@ const useStore = create((set) => ({
     } catch (error) {
       throw new Error(error);
     } finally {
-      set({ isFetching: false });
+      set({ isFetchingSkills: false });
     }
   },
 

@@ -37,7 +37,10 @@ export default function Dashboard() {
   const toast = useToast();
 
   const {
-    isFetching,
+    isFetchingProjects,
+    isFetchingExperiences,
+    isFetchingEducation,
+    isFetchingSkills,
     projects,
     experiences,
     education,
@@ -340,37 +343,37 @@ export default function Dashboard() {
         <Tabs defaultValue="projects" className="w-full">
           <TabsList className="grid w-full h-fit grid-cols-2 sm:grid-cols-4">
             <TabsTrigger value="projects">
-              Projects ({isFetching && <LoadingSpinner />}
+              Projects ({isFetchingProjects && <LoadingSpinner />}
               {projects && (
                 <span className="text-main mx-1">{projects.length}</span>
               )}
-              {!projects && !isFetching && 0})
+              {!projects && !isFetchingProjects && 0})
             </TabsTrigger>
             <TabsTrigger value="experiences">
-              Experiences ({isFetching && <LoadingSpinner />}
+              Experiences ({isFetchingExperiences && <LoadingSpinner />}
               {experiences && (
                 <span className="text-main mx-1">{experiences.length}</span>
               )}
-              {!experiences && !isFetching && 0})
+              {!experiences && !isFetchingExperiences && 0})
             </TabsTrigger>
             <TabsTrigger value="education">
-              Education ({isFetching && <LoadingSpinner />}
+              Education ({isFetchingEducation && <LoadingSpinner />}
               {education && (
                 <span className="text-main mx-1">{education.length}</span>
               )}
-              {!education && !isFetching && 0})
+              {!education && !isFetchingEducation && 0})
             </TabsTrigger>
             <TabsTrigger value="skills">
-              Skills ({isFetching && <LoadingSpinner />}
+              Skills ({isFetchingSkills && <LoadingSpinner />}
               {skills && (
                 <span className="text-main mx-1">{skills.length}</span>
               )}
-              {!skills && !isFetching && 0})
+              {!skills && !isFetchingSkills && 0})
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="projects">
-            {isFetching && (
+            {isFetchingProjects && (
               <div className="w-full h-full mt-20 flex items-center justify-center">
                 <LoadingSpinner />
               </div>
@@ -411,11 +414,13 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-            {!projects && !isFetching && <div>There is no projects yet!</div>}
+            {!projects && !isFetchingProjects && (
+              <div>There is no projects yet!</div>
+            )}
           </TabsContent>
 
           <TabsContent value="experiences">
-            {isFetching && (
+            {isFetchingExperiences && (
               <div className="w-full h-full mt-20 flex items-center justify-center">
                 <LoadingSpinner />
               </div>
@@ -456,12 +461,12 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-            {!experiences && !isFetching && (
+            {!experiences && !isFetchingExperiences && (
               <div>There is no experiences yet!</div>
             )}
           </TabsContent>
           <TabsContent value="education">
-            {isFetching && (
+            {isFetchingEducation && (
               <div className="w-full h-full mt-20 flex items-center justify-center">
                 <LoadingSpinner />
               </div>
@@ -502,10 +507,12 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-            {!education && !isFetching && <div>There is no education yet!</div>}
+            {!education && !isFetchingEducation && (
+              <div>There is no education yet!</div>
+            )}
           </TabsContent>
           <TabsContent value="skills">
-            {isFetching && (
+            {isFetchingSkills && (
               <div className="w-full h-full mt-20 flex items-center justify-center">
                 <LoadingSpinner />
               </div>
@@ -546,7 +553,7 @@ export default function Dashboard() {
                 </div>
               </div>
             )}
-            {!skills && !isFetching && <div>There is no skills yet!</div>}
+            {!skills && !isFetchingSkills && <div>There is no skills yet!</div>}
           </TabsContent>
         </Tabs>
       </MaxWidthContainer>
