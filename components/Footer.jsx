@@ -81,7 +81,7 @@ const Footer = () => {
         </div>
         <Separator className="h-px w-28 sm:w-px sm:h-10" />
         <div
-          className="px-4 max-sm:py-2 flex flex-col items-center
+          className="px-2 max-sm:py-2 flex flex-col items-center
                  gap-3"
         >
           <h3 className="font-semibold">Follow</h3>

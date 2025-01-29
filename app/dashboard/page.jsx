@@ -395,7 +395,7 @@ export default function Dashboard() {
               </div>
             )}
             {userData && (
-              <div className="w-full h-full flex flex-col items-center gap-4 py-8 ">
+              <div className="w-full h-full flex flex-col items-center gap-6 py-8 ">
                 <div className="flex items-center gap-4">
                   <h1 className="text-lg font-semibold">Avatar:</h1>
                   <div className="relative rouded-full ">
@@ -439,35 +439,44 @@ export default function Dashboard() {
                     <Edit2 className="w-4 h-4" />
                   </Button>
                 </div>
-                <div className="flex items-center flex-col gap-4">
+                <div className="w-full flex items-center flex-col gap-4">
                   <div className="flex items-center gap-2 p-2 border-b-2">
                     <h1 className="text-lg font-semibold">Social links</h1>
                     <Button size="icon" className="rounded-full w-7 h-7">
                       <Edit2 className="w-4 h-4" />
                     </Button>
                   </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="flex items-center gap-4">
+                  <div className="w-fit flex flex-col gap-2">
+                    <div className="md:flex items-start gap-4">
                       <h1 className="font-semibold">Facebook:</h1>
-                      <Link href={userData.facebook_link}>
+                      <Link
+                        href={userData.facebook_link}
+                        className="max-md:text-sm"
+                      >
                         {userData.facebook_link}
                       </Link>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="md:flex items-start gap-4">
                       <h1 className="font-semibold">Github:</h1>
-                      <Link href={userData.github_link}>
+                      <Link
+                        href={userData.github_link}
+                        className="max-md:text-sm"
+                      >
                         {userData.github_link}
                       </Link>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="md:flex items-start gap-4">
                       <h1 className="font-semibold">Youtube:</h1>
-                      <Link href={userData.youtube_link}>
+                      <Link
+                        href={userData.youtube_link}
+                        className="max-md:text-sm"
+                      >
                         {userData.youtube_link}
                       </Link>
                     </div>
                   </div>
                 </div>
-                <div className=" w-1/2 flex flex-col gap-4 items-center">
+                <div className="max-w-lg flex flex-col gap-4 items-center">
                   <div className="flex items-center gap-2 p-2 border-b-2">
                     <h1 className="text-lg font-semibold">Info</h1>
                     <Button size="icon" className="rounded-full w-7 h-7">
