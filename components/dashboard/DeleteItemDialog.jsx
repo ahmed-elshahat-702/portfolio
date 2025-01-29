@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "../ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 
 const DeleteItemDialog = ({ open, onClose, onDelete, type, id }) => {

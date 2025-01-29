@@ -2,15 +2,28 @@ import axios from "axios";
 import { create } from "zustand";
 
 const useStore = create((set) => ({
+  isFetchingUserData: true,
   isFetchingProjects: true,
   isFetchingExperiences: true,
   isFetchingEducation: true,
   isFetchingSkills: true,
   isLoading: false,
+  userData: null,
   projects: null,
   experiences: null,
   education: null,
   skills: null,
+
+  fetchUserData: async () => {
+    try {
+      const response = await axios.get("/api/user-data");
+      set({ userData: response.data[0] });
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      set({ isFetchingUserData: false });
+    }
+  },
 
   fetchProjects: async () => {
     try {

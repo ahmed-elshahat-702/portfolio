@@ -4,16 +4,16 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { z } from "zod";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+} from "../ui/dialog";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 // Define the validation schema
 const formSchemas = {

@@ -21,21 +21,26 @@ export async function PUT(request) {
 
   try {
     const data = await request.json();
-    const { id, ...updateData } = data;
+    // const { id, ...updateData } = data;
+    console.log(data);
 
-    const updatedUserInfo = await UserInfo.findByIdAndUpdate(id, updateData, {
-      new: true,
-    });
+    // const updatedUserInfo = await UserInfo.findByIdAndUpdate(id, updateData, {
+    //   new: true,
+    // });
 
-    if (!updatedUserInfo) {
-      return NextResponse.json({
-        message: "User info not found",
-      });
-    }
+    // if (!updatedUserInfo) {
+    //   return NextResponse.json({
+    //     message: "User info not found",
+    //   });
+    // }
 
+    // return NextResponse.json({
+    //   message: "User info updated successfully",
+    //   data: updatedUserInfo,
+    // });
     return NextResponse.json({
       message: "User info updated successfully",
-      data: updatedUserInfo,
+      data: data,
     });
   } catch (error) {
     return NextResponse.json({

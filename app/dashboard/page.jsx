@@ -1,12 +1,14 @@
 "use client";
-import AddItemDialog from "@/components/AddItemDialog";
-import DeleteItemDialog from "@/components/DeleteItemDialog";
+import AddItemDialog from "@/components/dashboard/AddItemDialog";
+import DeleteItemDialog from "@/components/dashboard/DeleteItemDialog";
+import UpdateItemDialog from "@/components/dashboard/UpdateItemsDialog";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MaxWidthContainer from "@/components/MaxWidthContainer";
 import ProjectCard from "@/components/ProjectCard";
 import ResumeCard from "@/components/ResumeCard";
 import SkillCard from "@/components/SkillCard";
 import Square from "@/components/Square";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -24,11 +26,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import UpdateItemDialog from "@/components/UpdateItemsDialog";
 import { useToast } from "@/hooks/use-toast";
 import useStore from "@/hooks/useStore";
-import { Plus } from "lucide-react";
+import { Edit2, Plus } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -37,14 +39,17 @@ export default function Dashboard() {
   const toast = useToast();
 
   const {
+    isFetchingUserData,
     isFetchingProjects,
     isFetchingExperiences,
     isFetchingEducation,
     isFetchingSkills,
+    userData,
     projects,
     experiences,
     education,
     skills,
+    fetchUserData,
     fetchProjects,
     fetchExperiences,
     fetchEducation,
@@ -208,6 +213,7 @@ export default function Dashboard() {
       const fetchAllData = async () => {
         try {
           await Promise.all([
+            fetchUserData(),
             fetchProjects(),
             fetchExperiences(),
             fetchEducation(),
@@ -223,7 +229,14 @@ export default function Dashboard() {
       };
       fetchAllData();
     }
-  }, [status, fetchProjects, fetchExperiences, fetchEducation, fetchSkills]);
+  }, [
+    status,
+    fetchUserData,
+    fetchProjects,
+    fetchExperiences,
+    fetchEducation,
+    fetchSkills,
+  ]);
 
   if (status === "loading") {
     return (
@@ -340,8 +353,11 @@ export default function Dashboard() {
             Log out
           </Button>
         </div>
-        <Tabs defaultValue="projects" className="w-full">
-          <TabsList className="grid w-full h-fit grid-cols-2 sm:grid-cols-4">
+        <Tabs defaultValue="user-data" className="w-full">
+          <TabsList className="grid w-full h-fit grid-cols-2 sm:grid-cols-5">
+            <TabsTrigger value="user-data">
+              User data {isFetchingUserData && <LoadingSpinner />}
+            </TabsTrigger>
             <TabsTrigger value="projects">
               Projects ({isFetchingProjects && <LoadingSpinner />}
               {projects && (
@@ -371,6 +387,101 @@ export default function Dashboard() {
               {!skills && !isFetchingSkills && 0})
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="user-data">
+            {isFetchingUserData && (
+              <div className="w-full h-full mt-20 flex items-center justify-center">
+                <LoadingSpinner />
+              </div>
+            )}
+            {userData && (
+              <div className="w-full h-full flex flex-col items-center gap-4 py-8 ">
+                <div className="flex items-center gap-4">
+                  <h1 className="text-lg font-semibold">Avatar:</h1>
+                  <div className="relative rouded-full ">
+                    <Avatar className="w-32 h-32 relative">
+                      <AvatarImage
+                        src={userData.avatar ?? "/images/avatar.png"}
+                        alt="avatar"
+                      />
+                      <AvatarFallback>
+                        <Image
+                          src="/images/avatar.png"
+                          alt="avatar"
+                          fill
+                          className="object-cover"
+                        />
+                      </AvatarFallback>
+                    </Avatar>
+                    <Button
+                      size="icon"
+                      className="absolute bottom-0 right-0 rounded-full"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <h1 className="text-lg font-semibold">Name:</h1>
+                  <p className="text-2xl font-bold capitalize">
+                    {userData.name}
+                  </p>
+                  <Button size="icon" className="rounded-full w-7 h-7">
+                    <Edit2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="flex items-center gap-4">
+                  <h1 className="text-lg font-semibold">Job:</h1>
+                  <p className="job text-xl font-light uppercase">
+                    {userData.job}
+                  </p>
+                  <Button size="icon" className="rounded-full w-7 h-7">
+                    <Edit2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="flex items-center flex-col gap-4">
+                  <div className="flex items-center gap-2 p-2 border-b-2">
+                    <h1 className="text-lg font-semibold">Social links</h1>
+                    <Button size="icon" className="rounded-full w-7 h-7">
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="flex items-center gap-4">
+                      <h1 className="font-semibold">Facebook:</h1>
+                      <Link href={userData.facebook_link}>
+                        {userData.facebook_link}
+                      </Link>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <h1 className="font-semibold">Github:</h1>
+                      <Link href={userData.github_link}>
+                        {userData.github_link}
+                      </Link>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <h1 className="font-semibold">Youtube:</h1>
+                      <Link href={userData.youtube_link}>
+                        {userData.youtube_link}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+                <div className=" w-1/2 flex flex-col gap-4 items-center">
+                  <div className="flex items-center gap-2 p-2 border-b-2">
+                    <h1 className="text-lg font-semibold">Info</h1>
+                    <Button size="icon" className="rounded-full w-7 h-7">
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <p className="text-center">{userData.info}</p>
+                </div>
+              </div>
+            )}
+            {!userData && !isFetchingUserData && (
+              <div>There is no user data yet!</div>
+            )}
+          </TabsContent>
 
           <TabsContent value="projects">
             {isFetchingProjects && (

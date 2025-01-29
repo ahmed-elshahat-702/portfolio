@@ -1,34 +1,29 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import axios from "axios";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { buttonVariants } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
-import { Separator } from "./ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import useStore from "@/hooks/useStore";
+import { cn } from "@/lib/utils";
 import { Facebook, Github, Youtube } from "lucide-react";
+import Link from "next/link";
+import { useEffect } from "react";
+import { buttonVariants } from "./ui/button";
+import { Separator } from "./ui/separator";
+import { Skeleton } from "./ui/skeleton";
 
 const Footer = () => {
+  const { isFetchingUserData, userData, fetchUserData } = useStore();
   const toast = useToast();
 
-  const [user, setUser] = useState();
-
   useEffect(() => {
-    const fetUserData = async () => {
-      try {
-        const res = await axios.get("/api/user-info");
-        setUser(res.data[0]);
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          message: "Error fetching user data",
-        });
-      }
-    };
-    fetUserData();
+    try {
+      fetchUserData();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An Error occured during fetching projects",
+      });
+    }
   }, []);
 
   return (
@@ -40,12 +35,10 @@ const Footer = () => {
         <div className="flex flex-col gap-1 max-lg:items-center">
           <div className="flex items-center gap-1 capitalize">
             © 2023 by{" "}
-            {!user ? (
+            {isFetchingUserData && !userData && (
               <Skeleton className="w-[100px] h-[20px] rounded" />
-            ) : (
-              user.name
             )}
-            .
+            {!isFetchingUserData && userData && userData.name}.
           </div>
           <div className="flex gap-1">
             <p>desingned by</p>
@@ -66,11 +59,10 @@ const Footer = () => {
         >
           <h3 className="font-semibold">Phone</h3>
           <div>
-            {!user ? (
+            {isFetchingUserData && !userData && (
               <Skeleton className="w-[160px] h-[20px] rounded" />
-            ) : (
-              user.phone_number
             )}
+            {!isFetchingUserData && userData && userData.phone_number}
           </div>
         </div>
         <Separator className="h-px w-28 sm:w-px sm:h-10" />
@@ -81,11 +73,10 @@ const Footer = () => {
         >
           <h3 className="font-semibold">Gmail</h3>
           <div>
-            {!user ? (
+            {isFetchingUserData && !userData && (
               <Skeleton className="w-[200px] h-[20px] rounded" />
-            ) : (
-              user.email
             )}
+            {!isFetchingUserData && userData && userData.email}
           </div>
         </div>
         <Separator className="h-px w-28 sm:w-px sm:h-10" />
@@ -94,17 +85,18 @@ const Footer = () => {
                  gap-3"
         >
           <h3 className="font-semibold">Follow</h3>
-          {!user ? (
+          {isFetchingUserData && !userData && (
             <div className="flex items-center gap-2">
               <Skeleton className="w-[35px] h-[35px] rounded-full" />
               <Skeleton className="w-[35px] h-[35px] rounded-full" />
               <Skeleton className="w-[35px] h-[35px] rounded-full" />
             </div>
-          ) : (
+          )}
+          {!isFetchingUserData && userData && (
             <div className="flex items-center gap-2">
               <Link
                 className={cn(buttonVariants({ variant: "ghost" }), "p-2")}
-                href={user.facebook_link}
+                href={userData.facebook_link}
               >
                 <Facebook className="text-2xl" />
               </Link>
@@ -112,14 +104,14 @@ const Footer = () => {
 
               <Link
                 className={cn(buttonVariants({ variant: "ghost" }), "p-2")}
-                href={user.github_link}
+                href={userData.github_link}
               >
                 <Github className="text-2xl" />
               </Link>
               <Separator className="w-px h-4" />
               <Link
                 className={cn(buttonVariants({ variant: "ghost" }), "p-2")}
-                href={user.youtube_link}
+                href={userData.youtube_link}
               >
                 <Youtube className="text-2xl" />
               </Link>

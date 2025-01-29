@@ -1,7 +1,8 @@
 "use client";
 
+import { useToast } from "@/hooks/use-toast";
+import useStore from "@/hooks/useStore";
 import { cn } from "@/lib/utils";
-import axios from "axios";
 import { Menu, PanelTopClose } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -11,7 +12,6 @@ import ThemeToggler from "./ThemeToggler";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { Skeleton } from "./ui/skeleton";
-import { useToast } from "@/hooks/use-toast";
 const navLinks = [
   {
     title: "Home",
@@ -32,6 +32,7 @@ const navLinks = [
 ];
 
 const Navbar = () => {
+  const { isFetchingUserData, userData, fetchUserData } = useStore();
   const toast = useToast();
 
   const [active, setActive] = useState("/");
@@ -42,22 +43,16 @@ const Navbar = () => {
     setActive(path);
   }, [path]);
 
-  const [user, setUser] = useState();
-
   useEffect(() => {
-    const fetUserData = async () => {
-      try {
-        const res = await axios.get("/api/user-info");
-        setUser(res.data[0]);
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          message: "Error fetching user data",
-        });
-      }
-    };
-    fetUserData();
+    try {
+      fetchUserData();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An Error occured during fetching projects",
+      });
+    }
   }, []);
 
   return (
@@ -80,19 +75,17 @@ const Navbar = () => {
               className="flex items-center gap-1 max-sm:items-start max-sm:flex-col max-sm:gap-0"
             >
               <span className="font-bold sm:text-xl max-sm:text-md">
-                {!user ? (
+                {isFetchingUserData && !userData && (
                   <Skeleton className="w-[150px] h-[25px] rounded ml-1 max-sm:mb-1" />
-                ) : (
-                  user.name
                 )}
+                {!isFetchingUserData && userData && userData.name}
               </span>
               <div className="text-gray-500 font-bold sm:text-sm max-sm:text-xs mb-0 flex items-center justify-center">
                 <span className="mx-1">/</span>
-                {!user ? (
+                {isFetchingUserData && !userData && (
                   <Skeleton className="w-[100px] h-[20px] rounded ml-1" />
-                ) : (
-                  user.job
                 )}
+                {!isFetchingUserData && userData && userData.job}
               </div>
             </Link>
           </div>
