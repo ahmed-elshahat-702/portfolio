@@ -29,7 +29,6 @@ const DeleteItemDialog = ({ open, onClose, onDelete, type, id }) => {
         title: "Error",
         description: `Failed to delete ${type}`,
       });
-      console.error(error);
     } finally {
       setIsDeleting(false);
     }
