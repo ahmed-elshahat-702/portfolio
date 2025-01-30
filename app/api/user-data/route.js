@@ -2,6 +2,14 @@ import { connectToDatabase } from "@/lib/db";
 import UserInfo from "@/lib/models/UserInfo";
 import { NextResponse } from "next/server";
 
+// Add CORS headers configuration
+const setCORSHeaders = (response) => {
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, PUT, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  return response;
+};
+
 export async function GET(request) {
   await connectToDatabase();
 
@@ -28,16 +36,24 @@ export async function PUT(request) {
     });
 
     if (!updatedUserInfo) {
-      return NextResponse.json({
-        message: "User info not found",
-      });
+      return setCORSHeaders(
+        NextResponse.json({ message: "User info not found" }, { status: 404 })
+      );
     }
 
-    return NextResponse.json(updatedUserInfo);
+    return setCORSHeaders(NextResponse.json(updatedUserInfo));
   } catch (error) {
     return NextResponse.json({
       message: "Error updating user info",
       error: error.message,
     });
   }
+}
+
+export async function OPTIONS() {
+  const response = new NextResponse(null);
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, PUT, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  return response;
 }
