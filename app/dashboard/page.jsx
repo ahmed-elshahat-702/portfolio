@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import useStore from "@/hooks/useStore";
@@ -36,7 +37,7 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const {
     isFetchingUserData,
@@ -62,6 +63,7 @@ export default function Dashboard() {
     deleteExperience,
     deleteEducation,
     deleteSkill,
+    updateUserData,
     updateProject,
     updateExperience,
     updateEducation,
@@ -178,6 +180,10 @@ export default function Dashboard() {
   const handleDialogUpdate = async (id, data) => {
     try {
       switch (updateDialogType) {
+        case "User data":
+          await updateUserData(id, data);
+          await fetchProjects();
+          break;
         case "Project":
           await updateProject(id, data);
           await fetchProjects();
@@ -354,8 +360,8 @@ export default function Dashboard() {
           </Button>
         </div>
         <Tabs defaultValue="user-data" className="w-full">
-          <TabsList className="grid w-full h-fit grid-cols-2 sm:grid-cols-5">
-            <TabsTrigger value="user-data">
+          <TabsList className="grid w-full h-fit grid-cols-2 md:grid-cols-5">
+            <TabsTrigger value="user-data" className="max-md:col-span-2">
               User data {isFetchingUserData && <LoadingSpinner />}
             </TabsTrigger>
             <TabsTrigger value="projects">
@@ -396,55 +402,68 @@ export default function Dashboard() {
             )}
             {userData && (
               <div className="w-full h-full flex flex-col items-center gap-6 py-8 ">
-                <div className="flex items-center gap-4">
-                  <h1 className="text-lg font-semibold">Avatar:</h1>
-                  <div className="relative rouded-full ">
-                    <Avatar className="w-32 h-32 relative">
-                      <AvatarImage
-                        src={userData.avatar ?? "/images/avatar.png"}
+                <Button
+                  variant="ghost"
+                  className="w-full my-4 border-2 border-dashed border-main"
+                  onClick={() =>
+                    handleUpdateClick({
+                      type: "User data",
+                      id: userData._id,
+                      initialData: userData,
+                    })
+                  }
+                >
+                  <span className="mx-2">
+                    <Edit2 className="w-4 h-4" />
+                  </span>
+                  Edit user data
+                </Button>
+                <div className="flex flex-col items-center gap-4">
+                  <Avatar className="w-32 h-32 relative">
+                    <AvatarImage
+                      src={userData.avatar ?? "/images/avatar.png"}
+                      alt="avatar"
+                    />
+                    <AvatarFallback>
+                      <Image
+                        src="/images/avatar.png"
                         alt="avatar"
+                        fill
+                        className="object-cover"
                       />
-                      <AvatarFallback>
-                        <Image
-                          src="/images/avatar.png"
-                          alt="avatar"
-                          fill
-                          className="object-cover"
-                        />
-                      </AvatarFallback>
-                    </Avatar>
-                    <Button
-                      size="icon"
-                      className="absolute bottom-0 right-0 rounded-full"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
+                    </AvatarFallback>
+                  </Avatar>
+                  <h1 className="text-lg font-semibold">Avatar</h1>
+                </div>
+                <Separator />
+                <div className="w-fit flex flex-col gap-4">
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-lg font-semibold">Name:</h1>
+                    <p className="text-2xl font-bold capitalize">
+                      {userData.name}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-lg font-semibold">Job:</h1>
+                    <p className="job text-xl font-light uppercase">
+                      {userData.job}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-lg font-semibold">Email:</h1>
+                    <p className="job text-xl font-light">{userData.email}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-lg font-semibold">Phone number:</h1>
+                    <p className="job text-xl font-light">
+                      {userData.phone_number}
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <h1 className="text-lg font-semibold">Name:</h1>
-                  <p className="text-2xl font-bold capitalize">
-                    {userData.name}
-                  </p>
-                  <Button size="icon" className="rounded-full w-7 h-7">
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                </div>
-                <div className="flex items-center gap-4">
-                  <h1 className="text-lg font-semibold">Job:</h1>
-                  <p className="job text-xl font-light uppercase">
-                    {userData.job}
-                  </p>
-                  <Button size="icon" className="rounded-full w-7 h-7">
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                </div>
+                <Separator />
                 <div className="w-full flex items-center flex-col gap-4">
                   <div className="flex items-center gap-2 p-2 border-b-2">
                     <h1 className="text-lg font-semibold">Social links</h1>
-                    <Button size="icon" className="rounded-full w-7 h-7">
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
                   </div>
                   <div className="w-fit flex flex-col gap-2">
                     <div className="md:flex items-start gap-4">
@@ -476,12 +495,10 @@ export default function Dashboard() {
                     </div>
                   </div>
                 </div>
+                <Separator />
                 <div className="max-w-lg flex flex-col gap-4 items-center">
                   <div className="flex items-center gap-2 p-2 border-b-2">
                     <h1 className="text-lg font-semibold">Info</h1>
-                    <Button size="icon" className="rounded-full w-7 h-7">
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
                   </div>
                   <p className="text-center">{userData.info}</p>
                 </div>

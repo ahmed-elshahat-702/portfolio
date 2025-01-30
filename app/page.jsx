@@ -11,12 +11,12 @@ import { cn } from "@/lib/utils";
 import { Facebook, GithubIcon, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const page = () => {
   const { isFetchingUserData, userData, fetchUserData } = useStore();
 
-  const toast = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     try {

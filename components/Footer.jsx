@@ -12,7 +12,7 @@ import { Skeleton } from "./ui/skeleton";
 
 const Footer = () => {
   const { isFetchingUserData, userData, fetchUserData } = useStore();
-  const toast = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     try {

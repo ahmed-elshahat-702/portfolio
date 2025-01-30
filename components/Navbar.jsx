@@ -33,7 +33,7 @@ const navLinks = [
 
 const Navbar = () => {
   const { isFetchingUserData, userData, fetchUserData } = useStore();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const [active, setActive] = useState("/");
   const [isCollapsed, setIsCollapsed] = useState(true);

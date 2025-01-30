@@ -28,7 +28,7 @@ const page = () => {
     skills,
     fetchSkills,
   } = useStore();
-  const toast = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     try {

@@ -177,6 +177,23 @@ const useStore = create((set) => ({
     }
   },
 
+  updateUserData: async (id, data) => {
+    set({ isLoading: true });
+    try {
+      const response = await axios.put(`/api/user-data`, {
+        data: {
+          id,
+          ...data,
+        },
+      });
+      set({ userData: response.data });
+    } catch (error) {
+      throw new Error(error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
   updateProject: async (id, project) => {
     set({ isLoading: true });
     try {

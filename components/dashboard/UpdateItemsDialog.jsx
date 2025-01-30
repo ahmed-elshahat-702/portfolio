@@ -1,4 +1,5 @@
-import { useToast } from "@/hooks/use-toast";
+"use client";
+
 import axios from "axios";
 import { X } from "lucide-react";
 import Image from "next/image";
@@ -14,9 +15,24 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "../ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
 
 // Define the validation schema
 const formSchemas = {
+  "User data": z.object({
+    name: z.string().min(1, "Name is required"),
+    job: z.string().min(1, "Job is required"),
+    email: z.string().email("Invalid email address"),
+    phone_number: z.string().min(11, "Phone number must be more than 11 digit"),
+    facebook_link: z.string().url("Invalid URL"),
+    github_link: z.string().url("Invalid URL"),
+    youtube_link: z.string().url("Invalid URL"),
+    info: z.string().min(1, "Info is required"),
+    avatar: z.string().url("Invalid URL"),
+  }),
   Project: z.object({
     name: z.string().min(1, "Name is required"),
     description: z.string().min(1, "Description is required"),
@@ -46,7 +62,9 @@ const formSchemas = {
 
 const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
   const [formData, setFormData] = useState(initialData || {});
-  const [imageUrl, setImageUrl] = useState(initialData?.image || "");
+  const [imageUrl, setImageUrl] = useState(
+    initialData?.image || initialData?.avatar || ""
+  );
   const [errors, setErrors] = useState({});
   const [actualFile, setActualFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +76,7 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
 
   useEffect(() => {
     setFormData(initialData || {});
-    setImageUrl(initialData?.image || "");
+    setImageUrl(initialData?.image || initialData?.avatar || "");
   }, [initialData]);
 
   const handleChange = (e) => {
@@ -119,7 +137,10 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
       let uploadedImageUrl = "";
 
       // Only proceed with image upload if we have an actual file and it's a Project type
-      if (actualFile && type === "Project") {
+      if (
+        (actualFile && type === "Project") ||
+        (actualFile && type === "User data")
+      ) {
         const uploadFormData = new FormData();
         uploadFormData.append("file", actualFile);
 
@@ -170,7 +191,7 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
       });
 
       setFormData(initialData || {});
-      setImageUrl(initialData?.image || "");
+      setImageUrl(initialData?.image || initialData?.avatar || "");
       setActualFile(null);
       setErrors({});
       onClose();
@@ -195,12 +216,10 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
 
   const renderFields = () => {
     const renderField = (label, name) => (
-      <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor={name} className="text-right">
-          {label}
-        </Label>
+      <div className="w-full grid grid-cols-4 gap-4">
+        <Label htmlFor={name}>{label}</Label>
         <div className="col-span-3">
-          {name === "image" ? (
+          {name === "image" || name === "avatar" ? (
             <div>
               <Input
                 id={name}
@@ -227,6 +246,17 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
                 </div>
               )}
             </div>
+          ) : name === "info" || name === "description" ? (
+            <Textarea
+              id={name}
+              name={name}
+              value={formData[name] || ""}
+              onChange={handleChange}
+              className={cn(
+                "w-full h-32",
+                errors[name] ? "border-red-500" : ""
+              )}
+            />
           ) : (
             <Input
               id={name}
@@ -244,6 +274,20 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
     );
 
     switch (type) {
+      case "User data":
+        return (
+          <>
+            {renderField("Name", "name")}
+            {renderField("Job", "job")}
+            {renderField("Email", "email")}
+            {renderField("Phone number", "phone_number")}
+            {renderField("Facebook link", "facebook_link")}
+            {renderField("Github link", "github_link")}
+            {renderField("Youtube link", "youtube_link")}
+            {renderField("Info", "info")}
+            {renderField("Image URL", "avatar")}
+          </>
+        );
       case "Project":
         return (
           <>
@@ -278,7 +322,11 @@ const UpdateItemDialog = ({ initialData, open, onClose, onUpdate, type }) => {
         <DialogHeader>
           <DialogTitle>Update New {type}</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">{renderFields()}</div>
+        <ScrollArea className="h-96">
+          <div className="flex flex-col items-start w-full gap-2">
+            {renderFields()}
+          </div>
+        </ScrollArea>
         <DialogFooter className="max-md:gap-2">
           <Button variant="outline" onClick={() => onClose(false)}>
             Cancel

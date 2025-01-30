@@ -20,7 +20,7 @@ export async function PUT(request) {
   await connectToDatabase();
 
   try {
-    const data = await request.json();
+    const { data } = await request.json();
     const { id, ...updateData } = data;
 
     const updatedUserInfo = await UserInfo.findByIdAndUpdate(id, updateData, {
@@ -33,10 +33,7 @@ export async function PUT(request) {
       });
     }
 
-    return NextResponse.json({
-      message: "User info updated successfully",
-      data: updatedUserInfo,
-    });
+    return NextResponse.json(updatedUserInfo);
   } catch (error) {
     return NextResponse.json({
       message: "Error updating user info",

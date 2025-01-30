@@ -18,7 +18,7 @@ import { useEffect } from "react";
 
 const page = () => {
   const { isFetchingProjects, projects, fetchProjects } = useStore();
-  const toast = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     try {
