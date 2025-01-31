@@ -34,7 +34,7 @@ const Footer = () => {
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-1 max-lg:items-center">
           <div className="flex items-center gap-1 capitalize">
-            © 2023 by{" "}
+            © 2025 by{" "}
             {isFetchingUserData && !userData && (
               <Skeleton className="w-[100px] h-[20px] rounded" />
             )}
@@ -42,7 +42,11 @@ const Footer = () => {
           </div>
           <div className="flex gap-1">
             <p>desingned by</p>
-            <Link href={"wix.com"} className="underline text-main">
+            <Link
+              href="https://www.wix.com"
+              target="_blank"
+              className="underline text-main"
+            >
               Wix
             </Link>
           </div>

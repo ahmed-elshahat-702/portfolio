@@ -13,15 +13,15 @@ const ProjectCard = ({
   return (
     <div className="bg-background shadow-sm w-full max-w-[600px] h-full flex flex-col justify-between relative">
       <div className="py-4">
-        <div className="header border-l-8 border-main text-main p-2 flex flex-col gap-2">
-          <h1 className="text-2xl max-sm:text-lg font-bold capitalize">
+        <div className="header border-l-8 border-main  p-2 flex flex-col gap-2">
+          <h1 className="text-2xl max-sm:text-lg font-bold capitalize text-main">
             {!project ? (
               <Skeleton className="w-[250px] max-w-full h-[30px] rounded" />
             ) : (
               project.name
             )}
           </h1>
-          <h3 className="max-sm:text-sm font-bold lowercase">
+          <h3 className="max-sm:text-sm font-semibold lowercase text-main">
             {!project ? (
               <Skeleton className="w-[400px] max-w-full h-[25px] rounded" />
             ) : (
@@ -38,6 +38,13 @@ const ProjectCard = ({
               </Link>
             )}
           </h3>
+          <h5 className="text-sm">
+            {!project ? (
+              <Skeleton className="w-[250px] max-w-full h-[20px] rounded" />
+            ) : (
+              project.description
+            )}
+          </h5>
         </div>
         <div className="px-4 py-2 max-sm:text-sm">
           {!project ? (
